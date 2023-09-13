@@ -1,12 +1,15 @@
 const PROTO_PATH = "./restaurant.proto";
-
-//var grpc = require("grpc");
-var grpc = require("@grpc/grpc-js");
 const dotenv = require("dotenv");
+const db = require("../config/db");
+
+var grpc = require("@grpc/grpc-js");
 var protoLoader = require("@grpc/proto-loader");
 
 //Load env vars
 dotenv.config({ path: "./config/config.env" });
+
+//Connect to database
+db.connectDB();
 
 var packageDefinition = protoLoader.loadSync(PROTO_PATH, {
   keepCase: true,
@@ -40,7 +43,16 @@ const menu = [
 
 server.addService(restaurantProto.RestaurantService.service, {
   getAllMenu: (_, callback) => {
-    callback(null, { menu });
+    db.getAllMenus()
+      .then((result) => {
+        if (!result) {
+          callback(null, { menu: [] });
+        }
+        callback(null, { menu: result });
+      })
+      .catch((e) => {
+        callback(e);
+      });
   },
   get: (call, callback) => {
     let menuItem = menu.find((n) => n.id == call.request.id);
@@ -56,10 +68,16 @@ server.addService(restaurantProto.RestaurantService.service, {
   },
   insert: (call, callback) => {
     let menuItem = call.request;
-
     menuItem.id = uuidv4();
     menu.push(menuItem);
-    callback(null, menuItem);
+
+    db.insertMenu(menuItem)
+      .then(() => {
+        callback(null, menuItem);
+      })
+      .catch((e) => {
+        callback(e);
+      });
   },
   update: (call, callback) => {
     let existingMenuItem = menu.find((n) => n.id == call.request.id);
