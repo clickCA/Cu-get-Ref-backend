@@ -98,17 +98,17 @@ server.addService(restaurantProto.RestaurantService.service, {
       });
   },
   remove: (call, callback) => {
-    let existingMenuItemIndex = menu.findIndex((n) => n.id == call.request.id);
-
-    if (existingMenuItemIndex != -1) {
-      menu.splice(existingMenuItemIndex, 1);
-      callback(null, {});
-    } else {
-      callback({
-        code: grpc.status.NOT_FOUND,
-        details: "NOT Found",
+    const { id } = call.request;
+    db.removeMenu(id)
+      .then(() => {
+        callback(null, {});
+      })
+      .catch((e) => {
+        callback({
+          code: grpc.status.NOT_FOUND,
+          details: "NOT Found",
+        });
       });
-    }
   },
 });
 
