@@ -84,18 +84,18 @@ server.addService(restaurantProto.RestaurantService.service, {
       });
   },
   update: (call, callback) => {
-    let existingMenuItem = menu.find((n) => n.id == call.request.id);
-
-    if (existingMenuItem) {
-      existingMenuItem.name = call.request.name;
-      existingMenuItem.price = call.request.price;
-      callback(null, existingMenuItem);
-    } else {
-      callback({
-        code: grpc.status.NOT_FOUND,
-        details: "Not Found",
+    const menu = call.request;
+    const { id } = menu;
+    db.updateMenu(id, menu)
+      .then(() => {
+        callback(null, menu);
+      })
+      .catch((e) => {
+        callback({
+          code: grpc.status.NOT_FOUND,
+          details: "Not Found",
+        });
       });
-    }
   },
   remove: (call, callback) => {
     let existingMenuItemIndex = menu.findIndex((n) => n.id == call.request.id);
