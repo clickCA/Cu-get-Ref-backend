@@ -55,16 +55,20 @@ server.addService(restaurantProto.RestaurantService.service, {
       });
   },
   get: (call, callback) => {
-    let menuItem = menu.find((n) => n.id == call.request.id);
-
-    if (menuItem) {
-      callback(null, menuItem);
-    } else {
-      callback({
-        code: grpc.status.NOT_FOUND,
-        details: "Not found",
+    const { id } = call.request;
+    db.getMenu(id)
+      .then((result) => {
+        if (!result) {
+          callback({
+            code: grpc.status.NOT_FOUND,
+            details: "Not found",
+          });
+        }
+        callback(null, result);
+      })
+      .catch((e) => {
+        callback(e);
       });
-    }
   },
   insert: (call, callback) => {
     let menuItem = call.request;
