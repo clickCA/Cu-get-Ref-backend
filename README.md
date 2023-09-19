@@ -1,2 +1,1 @@
-# SA-Activites
-All activity project in software Architecture
+# forked from SA-Activites @Nick
