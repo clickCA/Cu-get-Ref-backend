@@ -2,7 +2,7 @@
 
 ## Overview
 
-This application is built using Go and MongoDB and utilizes the Gin web framework. It allows you to perform CRUD operations on books.
+This application is built using Go and MySQL and utilizes the Gin web framework. It allows you to perform CRUD operations on books.
 
 ## Requirements
 
@@ -16,7 +16,7 @@ This application is built using Go and MongoDB and utilizes the Gin web framewor
 This application uses environment variables to handle configurations. To set these up:
 
 1. Create a .env file in the root directory of the application.
-2. Add your MongoDB connection string as follows:
+2. Add your MySQL connection string as follows:
 
 ```bash
 DB_HOST="localhost"
