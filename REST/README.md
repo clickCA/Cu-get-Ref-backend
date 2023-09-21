@@ -1,4 +1,4 @@
-# demo-golang-api-with-mongodb
+# REST-API
 
 ## Overview
 
