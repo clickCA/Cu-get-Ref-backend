@@ -39,7 +39,7 @@ go mod download
 go run main.go
 ```
 
-The application should now be running, and you should be connected to your MongoDB database.
+The application should now be running, and you should be connected to your MySQL database.
 
 ### **Using Swagger to Test API**
 
