@@ -7,7 +7,7 @@ This application is built using Go and MongoDB and utilizes the Gin web framewor
 ## Requirements
 
 - Go (Version 1.15 or higher)
-- MongoDB
+- MySQL
 
 ## Setup
 
@@ -19,7 +19,12 @@ This application uses environment variables to handle configurations. To set the
 2. Add your MongoDB connection string as follows:
 
 ```bash
-MONGO_URI=your_actual_mongo_uri_here
+DB_HOST="localhost"
+DB_PORT="3307"
+DB_USER="user"
+DB_PASS="password"
+DB_NAME="db"
+
 ```
 
 ## Running the application
