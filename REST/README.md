@@ -1,13 +1,13 @@
-# demo-golang-api-with-mongodb
+# REST-API
 
 ## Overview
 
-This application is built using Go and MongoDB and utilizes the Gin web framework. It allows you to perform CRUD operations on books.
+This application is built using Go and MySQL and utilizes the Gin web framework. It allows you to perform CRUD operations on books.
 
 ## Requirements
 
-- Go (Version 1.15 or higher)
-- MongoDB
+- Go (Version 1.21 or higher)
+- MySQL
 
 ## Setup
 
@@ -16,10 +16,15 @@ This application is built using Go and MongoDB and utilizes the Gin web framewor
 This application uses environment variables to handle configurations. To set these up:
 
 1. Create a .env file in the root directory of the application.
-2. Add your MongoDB connection string as follows:
+2. Add your MySQL connection string as follows:
 
 ```bash
-MONGO_URI=your_actual_mongo_uri_here
+DB_HOST="localhost"
+DB_PORT="3307"
+DB_USER="user"
+DB_PASS="password"
+DB_NAME="db"
+
 ```
 
 ## Running the application
@@ -34,7 +39,7 @@ go mod download
 go run main.go
 ```
 
-The application should now be running, and you should be connected to your MongoDB database.
+The application should now be running, and you should be connected to your MySQL database.
 
 ### **Using Swagger to Test API**
 
