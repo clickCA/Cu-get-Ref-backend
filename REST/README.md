@@ -6,7 +6,7 @@ This application is built using Go and MySQL and utilizes the Gin web framework.
 
 ## Requirements
 
-- Go (Version 1.15 or higher)
+- Go (Version 1.21 or higher)
 - MySQL
 
 ## Setup
