@@ -16,7 +16,7 @@ const connectDB = async () => {
 const getAllCourses = () =>
   new Promise(async (resolve, reject) => {
     try {
-      const data = Course.find().sort({ CourseCode: "asc" }).exec();
+      const data = Course.find().sort({ courseCode: "asc" }).exec();
       resolve(data);
     } catch (e) {
       reject(e);
@@ -26,7 +26,7 @@ const getAllCourses = () =>
 const getCourse = (key = "") =>
   new Promise(async (resolve, reject) => {
     try {
-      const data = await Menu.findOne({ CourseCode: key }).exec();
+      const data = await Menu.findOne({ courseCode: key }).exec();
       resolve(data);
     } catch (e) {
       reject(e);

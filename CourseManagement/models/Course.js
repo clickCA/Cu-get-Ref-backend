@@ -7,15 +7,15 @@ const CourseSchema = new mongoose.Schema(
       type: String,
       required: [true, "Please add an ID"],
     },
-    CourseName: {
+    courseName: {
       type: String,
       required: [true, "Please add a course name"],
     },
-    CourseCode: {
+    courseCode: {
       type: String,
       required: [true, "Please add a course code"],
     },
-    CourseDescription: {
+    courseDescription: {
       type: String,
       required: [true, "Please add a course description"],
     },
