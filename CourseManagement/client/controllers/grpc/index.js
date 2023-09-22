@@ -40,8 +40,7 @@ const getCourse = (req, res) => {
 
 const insertCourse = (req, res) => {
   const { courseName, courseCode, courseDescription } = req.body;
-  let id = Math.floor(Math.random() * 1000000) + 1;
-  id = id.toString();
+  const id = 1;
   const newCourseItem = {
     id,
     courseName,
