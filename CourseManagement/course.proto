@@ -1,0 +1,26 @@
+syntax ="proto3";
+
+service CourseService {
+    rpc GetAllCourse(Empty) returns (CourseList) {}
+    rpc Get (CourseId) returns (CourseItem){}
+    rpc Insert (CourseItem) returns (CourseItem) {}
+    rpc Update (CourseItem) returns (CourseItem) {}
+    rpc Remove (CourseId) returns (Empty) {}
+}
+
+message Empty{}
+
+message CourseItem {
+    string id =1;
+    string courseName=2;
+    string courseCode=3;
+    string courseDescription=4;
+}
+
+message CourseList{
+    repeated CourseItem course=1;
+}
+
+message CourseId{
+    string id=1;
+}
