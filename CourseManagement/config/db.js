@@ -47,7 +47,7 @@ const insertCourse = (data) =>
 const removeCourse = (key = "") =>
   new Promise(async (resolve, reject) => {
     try {
-      const data = await Menu.findOneAndDelete({ CourseCode: key }).exec();
+      const data = await Course.findOneAndDelete({ CourseCode: key }).exec();
       resolve(data);
     } catch (e) {
       reject(e);
@@ -57,7 +57,7 @@ const removeCourse = (key = "") =>
 const updateCourse = (key = "", arg) =>
   new Promise(async (resolve, reject) => {
     try {
-      const data = await Menu.findOneAndUpdate({ CourseCode: key }, arg, {
+      const data = await Course.findOneAndUpdate({ CourseCode: key }, arg, {
         new: true,
       }).exec();
       resolve(data);
@@ -70,7 +70,7 @@ module.exports = {
   connectDB,
   getAllCourses,
   getCourse,
-  insertMenu,
-  removeMenu,
-  updateMenu,
+  insertCourse,
+  removeCourse,
+  updateCourse,
 };
