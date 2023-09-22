@@ -1,4 +1,4 @@
-const PROTO_PATH = "./restaurant.proto";
+const PROTO_PATH = "./course.proto";
 const dotenv = require("dotenv");
 const db = require("../config/db");
 
@@ -18,37 +18,20 @@ var packageDefinition = protoLoader.loadSync(PROTO_PATH, {
   arrays: true,
 });
 
-var restaurantProto = grpc.loadPackageDefinition(packageDefinition);
+var courseProto = grpc.loadPackageDefinition(packageDefinition);
 
 const { v4: uuidv4 } = require("uuid");
 
 const server = new grpc.Server();
-const menu = [
-  {
-    id: "a68b823c-7ca6-44bc-b721-fb4d5312cafc",
-    name: "Tomyam Gung",
-    price: 500,
-  },
-  {
-    id: "34415c7c-f82d-4e44-88ca-ae2a1aaa92b7",
-    name: "Somtam",
-    price: 60,
-  },
-  {
-    id: "8551887c-f82d-4e44-88ca-ae2a1ccc92b7",
-    name: "Pad-Thai",
-    price: 120,
-  },
-];
 
-server.addService(restaurantProto.RestaurantService.service, {
-  getAllMenu: (_, callback) => {
-    db.getAllMenus()
+server.addService(courseProto.CourseService.service, {
+  getAllCourse: (_, callback) => {
+    db.getAllCourses()
       .then((result) => {
         if (!result) {
-          callback(null, { menu: [] });
+          callback(null, { course: [] });
         }
-        callback(null, { menu: result });
+        callback(null, { course: result });
       })
       .catch((e) => {
         callback(e);
@@ -56,7 +39,7 @@ server.addService(restaurantProto.RestaurantService.service, {
   },
   get: (call, callback) => {
     const { id } = call.request;
-    db.getMenu(id)
+    db.getCourse(id)
       .then((result) => {
         if (!result) {
           callback({
@@ -71,24 +54,23 @@ server.addService(restaurantProto.RestaurantService.service, {
       });
   },
   insert: (call, callback) => {
-    let menuItem = call.request;
-    menuItem.id = uuidv4();
-    menu.push(menuItem);
+    let courseItem = call.request;
+    courseItem.id = uuidv4();
 
-    db.insertMenu(menuItem)
+    db.insertCourse(courseItem)
       .then(() => {
-        callback(null, menuItem);
+        callback(null, courseItem);
       })
       .catch((e) => {
         callback(e);
       });
   },
   update: (call, callback) => {
-    const menu = call.request;
-    const { id } = menu;
-    db.updateMenu(id, menu)
+    const course = call.request;
+    const { id } = course;
+    db.updateCourse(id, course)
       .then(() => {
-        callback(null, menu);
+        callback(null, course);
       })
       .catch((e) => {
         callback({
@@ -99,7 +81,7 @@ server.addService(restaurantProto.RestaurantService.service, {
   },
   remove: (call, callback) => {
     const { id } = call.request;
-    db.removeMenu(id)
+    db.removeCourse(id)
       .then(() => {
         callback(null, {});
       })

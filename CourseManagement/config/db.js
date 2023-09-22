@@ -16,7 +16,7 @@ const connectDB = async () => {
 const getAllCourses = () =>
   new Promise(async (resolve, reject) => {
     try {
-      const data = Course.find().sort({ CourseCode: "asc" }).exec();
+      const data = Course.find().sort({ courseCode: "asc" }).exec();
       resolve(data);
     } catch (e) {
       reject(e);
@@ -26,7 +26,7 @@ const getAllCourses = () =>
 const getCourse = (key = "") =>
   new Promise(async (resolve, reject) => {
     try {
-      const data = await Menu.findOne({ CourseCode: key }).exec();
+      const data = await Menu.findOne({ courseCode: key }).exec();
       resolve(data);
     } catch (e) {
       reject(e);
@@ -47,7 +47,7 @@ const insertCourse = (data) =>
 const removeCourse = (key = "") =>
   new Promise(async (resolve, reject) => {
     try {
-      const data = await Menu.findOneAndDelete({ CourseCode: key }).exec();
+      const data = await Menu.findOneAndDelete({ courseCode: key }).exec();
       resolve(data);
     } catch (e) {
       reject(e);
@@ -57,7 +57,7 @@ const removeCourse = (key = "") =>
 const updateCourse = (key = "", arg) =>
   new Promise(async (resolve, reject) => {
     try {
-      const data = await Menu.findOneAndUpdate({ CourseCode: key }, arg, {
+      const data = await Menu.findOneAndUpdate({ courseCode: key }, arg, {
         new: true,
       }).exec();
       resolve(data);
@@ -70,7 +70,7 @@ module.exports = {
   connectDB,
   getAllCourses,
   getCourse,
-  insertMenu,
-  removeMenu,
-  updateMenu,
+  insertCourse,
+  removeCourse,
+  updateCourse,
 };
