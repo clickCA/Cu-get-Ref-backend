@@ -16,7 +16,7 @@ const connectDB = async () => {
 const getAllCourses = () =>
   new Promise(async (resolve, reject) => {
     try {
-      const data = Course.find().sort({ courseCode: "asc" }).exec();
+      const data = Course.find().sort({ id: "asc" }).exec();
       resolve(data);
     } catch (e) {
       reject(e);
@@ -26,7 +26,7 @@ const getAllCourses = () =>
 const getCourse = (key = "") =>
   new Promise(async (resolve, reject) => {
     try {
-      const data = await Course.findOne({ courseCode: key }).exec();
+      const data = await Course.findOne({ id: key }).exec();
       resolve(data);
     } catch (e) {
       reject(e);
@@ -47,7 +47,7 @@ const insertCourse = (data) =>
 const removeCourse = (key = "") =>
   new Promise(async (resolve, reject) => {
     try {
-      const data = await Course.findOneAndDelete({ courseCode: key }).exec();
+      const data = await Course.findOneAndDelete({ id: key }).exec();
       resolve(data);
     } catch (e) {
       reject(e);
@@ -57,7 +57,7 @@ const removeCourse = (key = "") =>
 const updateCourse = (key = "", arg) =>
   new Promise(async (resolve, reject) => {
     try {
-      const data = await Course.findOneAndUpdate({ courseCode: key }, arg, {
+      const data = await Course.findOneAndUpdate({ id: key }, arg, {
         new: true,
       }).exec();
       resolve(data);
