@@ -15,6 +15,10 @@ const CourseSchema = new mongoose.Schema(
       type: String,
       required: [true, "Please add a course code"],
     },
+    CourseDescription: {
+      type: String,
+      required: [true, "Please add a course description"],
+    },
   },
   {
     toJSON: { virtuals: true },
