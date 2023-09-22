@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 
+// Course structure for storing course details.
 const CourseSchema = new mongoose.Schema(
   {
     id: {
@@ -8,11 +9,11 @@ const CourseSchema = new mongoose.Schema(
     },
     CourseName: {
       type: String,
-      required: [true, "Please add a name"],
+      required: [true, "Please add a course name"],
     },
     CourseCode: {
       type: String,
-      required: [true, "Please add a price"],
+      required: [true, "Please add a course code"],
     },
   },
   {
@@ -21,4 +22,4 @@ const CourseSchema = new mongoose.Schema(
   }
 );
 
-module.exports = mongoose.model("Course", COurseSchema);
+module.exports = mongoose.model("Course", CourseSchema);
