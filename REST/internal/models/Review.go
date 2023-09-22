@@ -1,7 +1,9 @@
 package models
 
+import "gorm.io/gorm"
+
 type Review struct {
-	Base
+	gorm.Model
 	CourseID    uint   `json:"course_id"`
 	StudentID   uint   `json:"student_id"`
 	ProfessorID uint   `json:"professor_id"`

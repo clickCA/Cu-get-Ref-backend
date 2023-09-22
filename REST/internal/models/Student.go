@@ -1,8 +1,10 @@
 package models
 
+import "gorm.io/gorm"
+
 type Student struct {
-	Base
-	StudentID        string   `gorm:"type:varchar(255);uniqueIndex;notNull" json:"student_id"`
+	gorm.Model
+	StudentID        string   `gorm:"type:varchar(255);" json:"student_id"`
 	Name             string   `gorm:"notNull" json:"name"`
 	Email            string   `gorm:"type:varchar(255);uniqueIndex;notNull" json:"email"`
 	Password         string   `gorm:"notNull" json:"password"`
