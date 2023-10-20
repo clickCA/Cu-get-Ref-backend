@@ -3,15 +3,16 @@ package main
 import (
 	"authservice/controllers"
 	_ "authservice/docs"
+	"authservice/middleware"
 	"authservice/models"
 	"fmt"
 	"log"
-	"net/http"
 	"os"
 
-	"github.com/gorilla/mux"
+	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
-
+	swaggerFiles "github.com/swaggo/files"
+	ginSwagger "github.com/swaggo/gin-swagger"
 	"go.uber.org/zap"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
@@ -47,27 +48,24 @@ func main() {
 	}
 	defer logger.Sync() // Flushes buffer before exit
 
-	// Create a new Gorilla Mux router
-	r := mux.NewRouter()
+	tokenMiddleware := middleware.NewTokenMiddleware(logger)
+	// Create a new Gin router
+	r := gin.Default()
+	r.Use(tokenMiddleware.TokenValidationMiddleware())
 
 	// Create controllers for the signup and signin handlers
 	signupController := controllers.NewSignupController(logger)
 	signinController := controllers.NewSigninController(logger)
 
 	// Define the signup and signin routes
-	r.HandleFunc("/signup", signupController.SignupHandler).Methods("POST")
-	r.HandleFunc("/signin", signinController.SigninHandler).Methods("POST")
-	r.PathPrefix("/swagger/").Handler(http.StripPrefix("/swagger/", http.FileServer(http.Dir("docs"))))
-
+	r.POST("/signup", gin.WrapF(signupController.SignupHandler))
+	r.POST("/signin", gin.WrapF(signinController.SigninHandler))
+	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler, ginSwagger.URL("http://localhost:8080/swagger/doc.json")))
 	// Start the server
-	http.Handle("/", r)
 	port = os.Getenv("PORT")
 	if port == "" {
 		port = "8080"
 	}
 	logger.Info("Server started on :" + port)
-	http.ListenAndServe(":"+port, nil)
-}
-func ServeSwagger(rw http.ResponseWriter, r *http.Request) {
-	http.ServeFile(rw, r, "./docs/index.html")
+	r.Run(":" + port)
 }

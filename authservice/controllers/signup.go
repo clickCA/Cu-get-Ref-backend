@@ -12,6 +12,13 @@ import (
 type SignupController struct {
 	logger *zap.Logger
 }
+type SignupRequest struct {
+	Email        string `json:"email"`
+	PasswordHash string `json:"passwordhash"`
+}
+type SignupResponse struct {
+	Token string `json:"token"`
+}
 
 // NewSignupController returns a frsh Signup controller
 
@@ -24,13 +31,12 @@ func NewSignupController(logger *zap.Logger) *SignupController {
 // adds the user to the database of users
 // Signup - register a new user
 // @Summary Register a new user
-// @Description Register with email, password, username, and full name
+// @Description Register a new user with email and password
 // @Accept json
 // @Produce json
-// @Param input body SignupRequest true "User registration info"
-// @Success 200 {object} models.Base
+// @Param input body SignupRequest true "User signup info"
+// @Success 200 {object} SignupResponse
 // @Failure 400 {object} map[string]string
-// @Failure 409 {object} map[string]string
 // @Failure 500 {object} map[string]string
 // @Router /signup [post]
 func (ctrl *SignupController) SignupHandler(rw http.ResponseWriter, r *http.Request) {

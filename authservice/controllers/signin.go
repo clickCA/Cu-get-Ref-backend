@@ -29,6 +29,12 @@ import (
 	"go.uber.org/zap"
 )
 
+// SigninRequest represents the request body for the signin API.
+type SigninRequest struct {
+	Email        string `json:"email"`
+	PasswordHash string `json:"passwordhash"`
+}
+
 var (
 	signinRequests = promauto.NewCounter(prometheus.CounterOpts{
 		Name: "signin_total",
@@ -54,6 +60,9 @@ type SigninController struct {
 	promSigninSuccess prometheus.Counter
 	promSigninFail    prometheus.Counter
 	promSigninError   prometheus.Counter
+}
+type SigninResponse struct {
+	Token string `json:"token"`
 }
 
 // NewSigninController returns a frsh Signin controller
@@ -122,7 +131,7 @@ func validateUser(email string, passwordHash string) (bool, error) {
 // @Accept json
 // @Produce json
 // @Param input body SigninRequest true "User signin info"
-// @Success 200 {object} models.SigninResponse
+// @Success 200 {object} SigninResponse
 // @Failure 400 {object} map[string]string
 // @Failure 401 {object} map[string]string
 // @Failure 500 {object} map[string]string
