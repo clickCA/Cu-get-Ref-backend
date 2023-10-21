@@ -3,7 +3,6 @@ package main
 import (
 	"authservice/controllers"
 	_ "authservice/docs"
-	"authservice/middleware"
 	"authservice/models"
 	"fmt"
 	"log"
@@ -48,10 +47,8 @@ func main() {
 	}
 	defer logger.Sync() // Flushes buffer before exit
 
-	tokenMiddleware := middleware.NewTokenMiddleware(logger)
 	// Create a new Gin router
 	r := gin.Default()
-	r.Use(tokenMiddleware.TokenValidationMiddleware())
 
 	// Create controllers for the signup and signin handlers
 	signupController := controllers.NewSignupController(logger)

@@ -3,7 +3,8 @@ package middleware
 import (
 	"net/http"
 
-	"github.com/shadowshot-x/micro-product-go/authservice/jwt"
+	"authservice/jwt"
+
 	"go.uber.org/zap"
 )
 
