@@ -1,24 +1,24 @@
 definitions:
-  controllers.SigninRequest:
+  controllers.LoginRequest:
     properties:
       email:
         type: string
       passwordhash:
         type: string
     type: object
-  controllers.SigninResponse:
+  controllers.LoginResponse:
     properties:
       token:
         type: string
     type: object
-  controllers.SignupRequest:
+  controllers.RegisterRequest:
     properties:
       email:
         type: string
       passwordhash:
         type: string
     type: object
-  controllers.SignupResponse:
+  controllers.RegisterResponse:
     properties:
       token:
         type: string
@@ -26,25 +26,25 @@ definitions:
 info:
   contact: {}
 paths:
-  /signin:
+  /login:
     post:
       consumes:
       - application/json
-      description: Sign in with email and password
+      description: Log in with email and password
       parameters:
-      - description: User signin info
+      - description: User login info
         in: body
         name: input
         required: true
         schema:
-          $ref: '#/definitions/controllers.SigninRequest'
+          $ref: '#/definitions/controllers.LoginRequest'
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/controllers.SigninResponse'
+            $ref: '#/definitions/controllers.LoginResponse'
         "400":
           description: Bad Request
           schema:
@@ -63,26 +63,26 @@ paths:
             additionalProperties:
               type: string
             type: object
-      summary: Sign in a user and obtain a JWT token
-  /signup:
+      summary: Log in a user and obtain a JWT token
+  /register:
     post:
       consumes:
       - application/json
       description: Register a new user with email and password
       parameters:
-      - description: User signup info
+      - description: User register info
         in: body
         name: input
         required: true
         schema:
-          $ref: '#/definitions/controllers.SignupRequest'
+          $ref: '#/definitions/controllers.RegisterRequest'
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/controllers.SignupResponse'
+            $ref: '#/definitions/controllers.RegisterResponse'
         "400":
           description: Bad Request
           schema:

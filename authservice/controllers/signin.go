@@ -28,23 +28,22 @@ import (
 	"go.uber.org/zap"
 )
 
-// SigninRequest represents the request body for the signin API.
-type SigninRequest struct {
+// LoginRequest represents the request body for the login API.
+type LoginRequest struct {
 	Email        string `json:"email"`
 	PasswordHash string `json:"passwordhash"`
 }
 
-type SigninController struct {
+type LoginController struct {
 	logger *zap.Logger
 }
-type SigninResponse struct {
+type LoginResponse struct {
 	Token string `json:"token"`
 }
 
-// NewSigninController returns a frsh Signin controller
-
-func NewSigninController(logger *zap.Logger) *SigninController {
-	return &SigninController{
+// NewLoginController returns a fresh Login controller
+func NewLoginController(logger *zap.Logger) *LoginController {
+	return &LoginController{
 		logger: logger,
 	}
 }
@@ -94,26 +93,26 @@ func validateUser(email string, passwordHash string) (bool, error) {
 	return true, nil
 }
 
-// This will be supplied to the MUX router. It will be called when signin request is sent
+// This will be supplied to the MUX router. It will be called when login request is sent
 // if user not found or not validates, returns the Unauthorized error
 // if found, returns the JWT back. [How to return this?]
-// Signin - sign in a user
-// @Summary Sign in a user and obtain a JWT token
-// @Description Sign in with email and password
+// Login - log in a user
+// @Summary Log in a user and obtain a JWT token
+// @Description Log in with email and password
 // @Accept json
 // @Produce json
-// @Param input body SigninRequest true "User signin info"
-// @Success 200 {object} SigninResponse
+// @Param input body LoginRequest true "User login info"
+// @Success 200 {object} LoginResponse
 // @Failure 400 {object} map[string]string
 // @Failure 401 {object} map[string]string
 // @Failure 500 {object} map[string]string
-// @Router /signin [post]
-func (ctrl *SigninController) SigninHandler(rw http.ResponseWriter, r *http.Request) {
+// @Router /login [post]
+func (ctrl *LoginController) LoginHandler(rw http.ResponseWriter, r *http.Request) {
 	// Create a struct to hold the request data
-	var signinRequest SignupRequest
+	var loginRequest LoginRequest
 
-	// Decode the JSON request body into the SignupRequest struct
-	err := json.NewDecoder(r.Body).Decode(&signinRequest)
+	// Decode the JSON request body into the LoginRequest struct
+	err := json.NewDecoder(r.Body).Decode(&loginRequest)
 	if err != nil {
 		ctrl.logger.Error("Error decoding request body", zap.Error(err))
 		rw.WriteHeader(http.StatusBadRequest)
@@ -121,9 +120,9 @@ func (ctrl *SigninController) SigninHandler(rw http.ResponseWriter, r *http.Requ
 		return
 	}
 
-	// Now you can access the data from signinRequest
-	email := signinRequest.Email
-	passwordHash := signinRequest.PasswordHash
+	// Now you can access the data from loginRequest
+	email := loginRequest.Email
+	passwordHash := loginRequest.PasswordHash
 
 	// Validate the request and check if the user exists
 	valid, err := validateUser(email, passwordHash)

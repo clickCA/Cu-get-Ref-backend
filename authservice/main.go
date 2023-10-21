@@ -51,12 +51,12 @@ func main() {
 	r := gin.Default()
 
 	// Create controllers for the signup and signin handlers
-	signupController := controllers.NewSignupController(logger)
-	signinController := controllers.NewSigninController(logger)
+	signupController := controllers.NewRegisterController(logger)
+	signinController := controllers.NewLoginController(logger)
 
 	// Define the signup and signin routes
-	r.POST("/signup", gin.WrapF(signupController.SignupHandler))
-	r.POST("/signin", gin.WrapF(signinController.SigninHandler))
+	r.POST("/signup", gin.WrapF(signupController.RegisterHandler))
+	r.POST("/signin", gin.WrapF(signinController.LoginHandler))
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler, ginSwagger.URL("http://localhost:8080/swagger/doc.json")))
 	// Start the server
 	port = os.Getenv("PORT")

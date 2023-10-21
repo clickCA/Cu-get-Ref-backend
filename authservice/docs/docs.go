@@ -15,24 +15,24 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
-        "/signin": {
+        "/login": {
             "post": {
-                "description": "Sign in with email and password",
+                "description": "Log in with email and password",
                 "consumes": [
                     "application/json"
                 ],
                 "produces": [
                     "application/json"
                 ],
-                "summary": "Sign in a user and obtain a JWT token",
+                "summary": "Log in a user and obtain a JWT token",
                 "parameters": [
                     {
-                        "description": "User signin info",
+                        "description": "User login info",
                         "name": "input",
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/controllers.SigninRequest"
+                            "$ref": "#/definitions/controllers.LoginRequest"
                         }
                     }
                 ],
@@ -40,7 +40,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/controllers.SigninResponse"
+                            "$ref": "#/definitions/controllers.LoginResponse"
                         }
                     },
                     "400": {
@@ -73,7 +73,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/signup": {
+        "/register": {
             "post": {
                 "description": "Register a new user with email and password",
                 "consumes": [
@@ -85,12 +85,12 @@ const docTemplate = `{
                 "summary": "Register a new user",
                 "parameters": [
                     {
-                        "description": "User signup info",
+                        "description": "User register info",
                         "name": "input",
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/controllers.SignupRequest"
+                            "$ref": "#/definitions/controllers.RegisterRequest"
                         }
                     }
                 ],
@@ -98,7 +98,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/controllers.SignupResponse"
+                            "$ref": "#/definitions/controllers.RegisterResponse"
                         }
                     },
                     "400": {
@@ -124,7 +124,7 @@ const docTemplate = `{
         }
     },
     "definitions": {
-        "controllers.SigninRequest": {
+        "controllers.LoginRequest": {
             "type": "object",
             "properties": {
                 "email": {
@@ -135,7 +135,7 @@ const docTemplate = `{
                 }
             }
         },
-        "controllers.SigninResponse": {
+        "controllers.LoginResponse": {
             "type": "object",
             "properties": {
                 "token": {
@@ -143,7 +143,7 @@ const docTemplate = `{
                 }
             }
         },
-        "controllers.SignupRequest": {
+        "controllers.RegisterRequest": {
             "type": "object",
             "properties": {
                 "email": {
@@ -154,7 +154,7 @@ const docTemplate = `{
                 }
             }
         },
-        "controllers.SignupResponse": {
+        "controllers.RegisterResponse": {
             "type": "object",
             "properties": {
                 "token": {
