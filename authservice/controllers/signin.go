@@ -16,6 +16,7 @@
 package controllers
 
 import (
+	"encoding/json"
 	"errors"
 	"fmt"
 	"net/http"
@@ -108,46 +109,48 @@ func validateUser(email string, passwordHash string) (bool, error) {
 // @Failure 500 {object} map[string]string
 // @Router /signin [post]
 func (ctrl *SigninController) SigninHandler(rw http.ResponseWriter, r *http.Request) {
-	// increment total singin requests
+	// Create a struct to hold the request data
+	var signinRequest SignupRequest
 
-	// validate the request first.
-	if _, ok := r.Header["Email"]; !ok {
-		ctrl.logger.Warn("Email was not found in the header")
-		rw.WriteHeader(http.StatusBadRequest)
-		rw.Write([]byte("Email Missing"))
-		return
-	}
-	if _, ok := r.Header["Passwordhash"]; !ok {
-		ctrl.logger.Warn("Passwordhash was not found in the header")
-		rw.WriteHeader(http.StatusBadRequest)
-		rw.Write([]byte("Passwordhash Missing"))
-		return
-	}
-	// lets see if the user exists
-	valid, err := validateUser(r.Header["Email"][0], r.Header["Passwordhash"][0])
+	// Decode the JSON request body into the SignupRequest struct
+	err := json.NewDecoder(r.Body).Decode(&signinRequest)
 	if err != nil {
-		// this means either the user does not exist
-		ctrl.logger.Warn("User does not exist", zap.String("email", r.Header["Email"][0]))
+		ctrl.logger.Error("Error decoding request body", zap.Error(err))
+		rw.WriteHeader(http.StatusBadRequest)
+		rw.Write([]byte("Invalid request body"))
+		return
+	}
+
+	// Now you can access the data from signinRequest
+	email := signinRequest.Email
+	passwordHash := signinRequest.PasswordHash
+
+	// Validate the request and check if the user exists
+	valid, err := validateUser(email, passwordHash)
+	if err != nil {
+		// This means either the user does not exist
+		ctrl.logger.Warn("User does not exist", zap.String("email", email))
 		rw.WriteHeader(http.StatusUnauthorized)
 		rw.Write([]byte("User Does not Exist"))
 		return
 	}
 
 	if !valid {
-		// this means the password is wrong
-		ctrl.logger.Warn("Password is wrong", zap.String("email", r.Header["Email"][0]))
+		// This means the password is wrong
+		ctrl.logger.Warn("Password is wrong", zap.String("email", email))
 		rw.WriteHeader(http.StatusUnauthorized)
 		rw.Write([]byte("Incorrect Password"))
 		return
 	}
+
 	tokenString, err := getSignedToken()
 	if err != nil {
-		ctrl.logger.Error("unable to sign the token", zap.Error(err))
+		ctrl.logger.Error("Unable to sign the token", zap.Error(err))
 		rw.WriteHeader(http.StatusInternalServerError)
 		rw.Write([]byte("Internal Server Error"))
 		return
 	}
-	ctrl.logger.Info("Token sign", zap.String("token", tokenString), zap.String("email", r.Header["Email"][0]))
+	ctrl.logger.Info("Token sign", zap.String("token", tokenString), zap.String("email", email))
 
 	rw.WriteHeader(http.StatusOK)
 	rw.Write([]byte(tokenString))

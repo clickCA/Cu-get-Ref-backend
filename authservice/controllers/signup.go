@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"encoding/json"
 	"net/http"
 
 	"authservice/models"
@@ -40,43 +41,36 @@ func NewSignupController(logger *zap.Logger) *SignupController {
 // @Failure 500 {object} map[string]string
 // @Router /signup [post]
 func (ctrl *SignupController) SignupHandler(rw http.ResponseWriter, r *http.Request) {
-	// extra error handling should be done at server side to prevent malicious attacks
-	if _, ok := r.Header["Email"]; !ok {
-		ctrl.logger.Warn("Email was not found in the header")
+	// Create a variable to hold the request data
+	var signupRequest SignupRequest
+
+	// Decode the JSON request body into the SignupRequest struct
+	err := json.NewDecoder(r.Body).Decode(&signupRequest)
+	if err != nil {
+		ctrl.logger.Error("Error decoding request body", zap.Error(err))
 		rw.WriteHeader(http.StatusBadRequest)
-		rw.Write([]byte("Email Missing"))
-		return
-	}
-	if _, ok := r.Header["Username"]; !ok {
-		ctrl.logger.Warn("Username was not found in the header")
-		rw.WriteHeader(http.StatusBadRequest)
-		rw.Write([]byte("Username Missing"))
-		return
-	}
-	if _, ok := r.Header["Passwordhash"]; !ok {
-		ctrl.logger.Warn("Passwordhash was not found in the header")
-		rw.WriteHeader(http.StatusBadRequest)
-		rw.Write([]byte("Passwordhash Missing"))
-		return
-	}
-	if _, ok := r.Header["Fullname"]; !ok {
-		ctrl.logger.Warn("Fullname was not found in the header")
-		rw.WriteHeader(http.StatusBadRequest)
-		rw.Write([]byte("Fullname Missing"))
+		rw.Write([]byte("Invalid request body"))
 		return
 	}
 
-	// validate and then add the user
-	check := models.AddUserObject(r.Header["Email"][0], r.Header["Username"][0], r.Header["Passwordhash"][0],
-		r.Header["Fullname"][0], 0)
-	// if false means username already exists
+	// Now you can access the data from signupRequest
+	email := signupRequest.Email
+	passwordHash := signupRequest.PasswordHash
+
+	// You can also add validation for other fields if needed
+
+	// Validate and then add the user
+	check := models.AddUserObject(email, "", passwordHash, "", 0)
+
+	// If check is false, it means the user already exists
 	if !check {
-		ctrl.logger.Warn("User already exists", zap.String("email", r.Header["Email"][0]), zap.String("username", r.Header["Username"][0]))
+		ctrl.logger.Warn("User already exists", zap.String("email", email))
 		rw.WriteHeader(http.StatusConflict)
 		rw.Write([]byte("Email or Username already exists"))
 		return
 	}
-	ctrl.logger.Info("User created", zap.String("email", r.Header["Email"][0]), zap.String("username", r.Header["Username"][0]))
+
+	ctrl.logger.Info("User created", zap.String("email", email))
 	rw.WriteHeader(http.StatusOK)
 	rw.Write([]byte("User Created"))
 }
