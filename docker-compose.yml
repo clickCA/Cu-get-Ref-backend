@@ -20,6 +20,20 @@ services:
       # Where our data will be persisted
     volumes:
       - my-db:/var/lib/mysql
+  mongo:
+    image: mongo:7-jammy
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: password
+      MONGO_INITDB_DATABASE: db
+    ports:
+      - '27018:27017'
+    expose:
+      - '27017'
+    volumes:
+      - mongo-db:/data/db
 # Names our volume
 volumes:
   my-db:
+  mongo-db:
