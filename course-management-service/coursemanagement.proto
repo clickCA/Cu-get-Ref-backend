@@ -1,0 +1,25 @@
+syntax ="proto3";
+
+service CourseManagementService {
+    rpc GetAllSubject(Empty) returns (SubjectList) {}
+    rpc GetSubject (SubjectId) returns (SubjectItem){}
+    rpc AddNewSubject (SubjectItem) returns (SubjectItem) {}
+    rpc UpdateSubjectDetail (SubjectItem) returns (SubjectItem) {}
+    rpc DeleteSubject (SubjectId) returns (Empty) {}
+}
+
+message Empty{}
+
+message SubjectItem {
+    string id =1;
+    string name=2;
+    int32 price=3;
+}
+
+message SubjectList{
+    repeated SubjectItem subject=1;
+}
+
+message SubjectId{
+    string id=1;
+}
