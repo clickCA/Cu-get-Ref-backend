@@ -33,6 +33,15 @@ services:
       - '27017'
     volumes:
       - mongo-db:/data/db
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
+    container_name: 'rabbitmq'
+    ports:
+      - 5672:5672
+      - 15672:15672
+    volumes:
+      - ./vol/rabbitmq/data/:/var/lib/rabbitmq/
+      - ./vol/rabbitmq/log/:/var/log/rabbitmq
 # Names our volume
 volumes:
   my-db:
