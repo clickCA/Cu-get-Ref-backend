@@ -5,6 +5,7 @@ import (
 	"authservice/controllers"
 	_ "authservice/docs"
 	"authservice/models"
+	"authservice/services"
 	"log"
 
 	"github.com/gin-gonic/gin"
@@ -29,13 +30,13 @@ func main() {
 	// Create a new Gin router
 	r := gin.Default()
 
+	authService := services.New(db)
 	// Create controllers for the signup and signin handlers
-	signupController := controllers.NewRegisterController(logger)
-	signinController := controllers.NewLoginController(logger)
+	AuthController := controllers.NewAuthController(logger, authService)
 
 	// Define the signup and signin routes
-	r.POST("/register", gin.WrapF(signupController.RegisterHandler))
-	r.POST("/login", gin.WrapF(signinController.LoginHandler))
+	r.POST("/register", gin.WrapF(AuthController.RegisterHandler))
+	r.POST("/login", gin.WrapF(AuthController.LoginHandler))
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler, ginSwagger.URL("http://localhost:8080/swagger/doc.json")))
 	// Start the server
 

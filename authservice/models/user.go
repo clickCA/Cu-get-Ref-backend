@@ -9,5 +9,5 @@ type User struct {
 	gorm.Model
 	Email        string `gorm:"uniqueIndex"`
 	PasswordHash string
-	Role         int
+	Role         Role
 }

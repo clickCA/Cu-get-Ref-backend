@@ -32,7 +32,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/controllers.LoginRequest"
+                            "$ref": "#/definitions/models.LoginRequest"
                         }
                     }
                 ],
@@ -40,7 +40,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/controllers.LoginResponse"
+                            "$ref": "#/definitions/models.LoginResponse"
                         }
                     },
                     "400": {
@@ -90,7 +90,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/controllers.RegisterRequest"
+                            "$ref": "#/definitions/models.RegisterRequest"
                         }
                     }
                 ],
@@ -98,7 +98,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/controllers.RegisterResponse"
+                            "$ref": "#/definitions/models.RegisterResponse"
                         }
                     },
                     "400": {
@@ -124,7 +124,19 @@ const docTemplate = `{
         }
     },
     "definitions": {
-        "controllers.LoginRequest": {
+        "gorm.DeletedAt": {
+            "type": "object",
+            "properties": {
+                "time": {
+                    "type": "string"
+                },
+                "valid": {
+                    "description": "Valid is true if Time is not NULL",
+                    "type": "boolean"
+                }
+            }
+        },
+        "models.LoginRequest": {
             "type": "object",
             "properties": {
                 "email": {
@@ -132,18 +144,24 @@ const docTemplate = `{
                 },
                 "passwordhash": {
                     "type": "string"
+                },
+                "role": {
+                    "$ref": "#/definitions/models.Role"
                 }
             }
         },
-        "controllers.LoginResponse": {
+        "models.LoginResponse": {
             "type": "object",
             "properties": {
                 "token": {
                     "type": "string"
+                },
+                "user": {
+                    "$ref": "#/definitions/models.User"
                 }
             }
         },
-        "controllers.RegisterRequest": {
+        "models.RegisterRequest": {
             "type": "object",
             "properties": {
                 "email": {
@@ -151,13 +169,58 @@ const docTemplate = `{
                 },
                 "passwordhash": {
                     "type": "string"
+                },
+                "role": {
+                    "$ref": "#/definitions/models.Role"
                 }
             }
         },
-        "controllers.RegisterResponse": {
+        "models.RegisterResponse": {
             "type": "object",
             "properties": {
                 "token": {
+                    "type": "string"
+                },
+                "user": {
+                    "$ref": "#/definitions/models.User"
+                }
+            }
+        },
+        "models.Role": {
+            "type": "integer",
+            "enum": [
+                0,
+                1,
+                2
+            ],
+            "x-enum-varnames": [
+                "Admin",
+                "Student",
+                "Professor"
+            ]
+        },
+        "models.User": {
+            "type": "object",
+            "properties": {
+                "createdAt": {
+                    "type": "string"
+                },
+                "deletedAt": {
+                    "$ref": "#/definitions/gorm.DeletedAt"
+                },
+                "email": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "passwordHash": {
+                    "type": "string"
+                },
+                "role": {
+                    "$ref": "#/definitions/models.Role"
+                },
+                "updatedAt": {
                     "type": "string"
                 }
             }
