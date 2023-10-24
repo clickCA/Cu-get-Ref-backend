@@ -11,7 +11,7 @@ definitions:
     properties:
       email:
         type: string
-      passwordhash:
+      password:
         type: string
       role:
         $ref: '#/definitions/models.Role'
@@ -27,7 +27,7 @@ definitions:
     properties:
       email:
         type: string
-      passwordhash:
+      password:
         type: string
       role:
         $ref: '#/definitions/models.Role'

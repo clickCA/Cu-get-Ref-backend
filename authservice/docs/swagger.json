@@ -131,7 +131,7 @@
                 "email": {
                     "type": "string"
                 },
-                "passwordhash": {
+                "password": {
                     "type": "string"
                 },
                 "role": {
@@ -156,7 +156,7 @@
                 "email": {
                     "type": "string"
                 },
-                "passwordhash": {
+                "password": {
                     "type": "string"
                 },
                 "role": {
