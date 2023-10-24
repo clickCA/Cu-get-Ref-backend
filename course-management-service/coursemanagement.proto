@@ -1,5 +1,5 @@
 syntax ="proto3";
-option go_package = "course-management-service/coursemanagement";
+option go_package = "course-management-service/course_management";
 
 service CourseManagementService {
     rpc GetAllSubject(Empty) returns (SubjectList) {}
