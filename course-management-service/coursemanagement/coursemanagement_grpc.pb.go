@@ -4,7 +4,7 @@
 // - protoc             v4.24.4
 // source: coursemanagement.proto
 
-package course_management_service
+package course_management
 
 import (
 	context "context"
