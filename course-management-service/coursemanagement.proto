@@ -1,8 +1,9 @@
 syntax ="proto3";
+option go_package = "course-management-service/course-management-service";
 
 service CourseManagementService {
     rpc GetAllSubject(Empty) returns (SubjectList) {}
-    rpc GetSubject (SubjectId) returns (SubjectItem){}
+    rpc GetSubject (SubjectId) returns (SubjectItem) {}
     rpc AddNewSubject (SubjectItem) returns (SubjectItem) {}
     rpc UpdateSubjectDetail (SubjectItem) returns (SubjectItem) {}
     rpc DeleteSubject (SubjectId) returns (Empty) {}
