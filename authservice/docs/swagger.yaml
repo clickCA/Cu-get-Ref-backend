@@ -1,26 +1,69 @@
 definitions:
-  controllers.LoginRequest:
+  gorm.DeletedAt:
+    properties:
+      time:
+        type: string
+      valid:
+        description: Valid is true if Time is not NULL
+        type: boolean
+    type: object
+  models.LoginRequest:
     properties:
       email:
         type: string
       passwordhash:
         type: string
+      role:
+        $ref: '#/definitions/models.Role'
     type: object
-  controllers.LoginResponse:
+  models.LoginResponse:
     properties:
       token:
         type: string
+      user:
+        $ref: '#/definitions/models.User'
     type: object
-  controllers.RegisterRequest:
+  models.RegisterRequest:
     properties:
       email:
         type: string
       passwordhash:
         type: string
+      role:
+        $ref: '#/definitions/models.Role'
     type: object
-  controllers.RegisterResponse:
+  models.RegisterResponse:
     properties:
       token:
+        type: string
+      user:
+        $ref: '#/definitions/models.User'
+    type: object
+  models.Role:
+    enum:
+    - 0
+    - 1
+    - 2
+    type: integer
+    x-enum-varnames:
+    - Admin
+    - Student
+    - Professor
+  models.User:
+    properties:
+      createdAt:
+        type: string
+      deletedAt:
+        $ref: '#/definitions/gorm.DeletedAt'
+      email:
+        type: string
+      id:
+        type: integer
+      passwordHash:
+        type: string
+      role:
+        $ref: '#/definitions/models.Role'
+      updatedAt:
         type: string
     type: object
 info:
@@ -37,14 +80,14 @@ paths:
         name: input
         required: true
         schema:
-          $ref: '#/definitions/controllers.LoginRequest'
+          $ref: '#/definitions/models.LoginRequest'
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/controllers.LoginResponse'
+            $ref: '#/definitions/models.LoginResponse'
         "400":
           description: Bad Request
           schema:
@@ -75,14 +118,14 @@ paths:
         name: input
         required: true
         schema:
-          $ref: '#/definitions/controllers.RegisterRequest'
+          $ref: '#/definitions/models.RegisterRequest'
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/controllers.RegisterResponse'
+            $ref: '#/definitions/models.RegisterResponse'
         "400":
           description: Bad Request
           schema:

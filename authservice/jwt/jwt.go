@@ -1,13 +1,13 @@
 package jwt
 
 import (
+	"authservice/config"
 	"crypto/hmac"
 	"crypto/sha256"
 	"encoding/base64"
 	"encoding/json"
 	"errors"
 	"fmt"
-	"os"
 	"strings"
 	"time"
 )
@@ -30,7 +30,7 @@ type ClaimsMap struct {
 
 // GetSecret fetches the value for the JWT_SECRET from the environment variable
 func GetSecret() string {
-	return os.Getenv("JWT_SECRET")
+	return config.GetSecret()
 }
 
 // Function for generating the tokens.
