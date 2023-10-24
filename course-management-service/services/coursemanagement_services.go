@@ -4,10 +4,31 @@ import (
 	"context"
 	course_management "course-management-service/coursemanagement"
 	"log"
+
+	"gorm.io/driver/mysql"
+	"gorm.io/gorm"
 )
 
 type Server struct {
 	course_management.UnimplementedCourseManagementServiceServer
+}
+
+var dsn = "root:password@localhost:3307/db?charset=utf8mb4&parseTime=True&loc=Local"
+var db, _ = gorm.Open(mysql.Open(dsn), &gorm.Config{})
+
+type Subject struct {
+	SubjectId string `gorm:"primaryKey"`
+	SubjectName string
+	CourseDescription string
+	FacultyDepartment string
+	AcademicTerm string
+	AcademicYear int32
+	Professors []*string
+	Prerequisites []*string
+	Status string
+	CurriculumName string
+	DegreeLevel string
+	TeachingHours int32
 }
 
 // type CourseManagementServiceClient interface {
