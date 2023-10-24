@@ -6,5 +6,6 @@ restuarant/
 */.env.local
 */.env.development.local
 */.env.test.local
+vol*
 */.env.production.local
 ```
