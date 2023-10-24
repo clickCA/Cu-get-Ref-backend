@@ -44,5 +44,5 @@ The application should now be running, and you should be connected to your MySQL
 ### **Using Swagger to Test API**
 
 To test the API using Swagger:
-
+`swag init --parseDependency --parseInternal`
 **Navigate to Swagger UI**: Open your web browser and go to **`http://localhost:8080/swagger/index.html`**.
