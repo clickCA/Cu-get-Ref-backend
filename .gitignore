@@ -1,6 +1,6 @@
 **.env
 grpc/
-restuarant/
+restaurant/
 */node_modules/
 */.env
 */.env.local
@@ -8,4 +8,3 @@ restuarant/
 */.env.test.local
 vol*
 */.env.production.local
-```
