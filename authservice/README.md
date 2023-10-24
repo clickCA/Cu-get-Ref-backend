@@ -15,17 +15,8 @@ This application is built using Go and MySQL and utilizes the Gin web framework.
 
 This application uses environment variables to handle configurations. To set these up:
 
-1. Create a .env file in the root directory of the application.
-2. Add your MySQL connection string as follows:
-
-```bash
-DB_HOST="localhost"
-DB_PORT="3307"
-DB_USER="user"
-DB_PASS="password"
-DB_NAME="db"
-
-```
+1. Create a /config/.env.local file.
+2. Add your MySQL connection string from `.env.template` to `.env.local`.
 
 ## Running the application
 
