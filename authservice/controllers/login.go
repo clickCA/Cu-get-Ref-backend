@@ -23,7 +23,7 @@ import (
 	"time"
 
 	"authservice/jwt"
-	"authservice/models"
+	"authservice/services"
 
 	"go.uber.org/zap"
 )
@@ -81,7 +81,7 @@ func getSignedToken() (string, error) {
 
 // searches the user in the database.
 func validateUser(email string, passwordHash string) (bool, error) {
-	usr, exists := models.GetUserObject(email)
+	usr, exists := services.GetUserByEmail(email)
 	if !exists {
 		return false, errors.New("user does not exist")
 	}

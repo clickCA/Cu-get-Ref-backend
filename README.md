@@ -1,6 +1,8 @@
 # Cu get Ref-backend
 
-> forked from SA-Activites @Nick
+## structure
+
+[clean architecture](https://dev.to/michinoins/building-a-crud-app-with-mysql-gorm-echo-and-clean-architecture-in-go-h6d)
 
 **Note**: This document is a work in progress. Changes will be made over time to refine and expand upon the instructions.
 
