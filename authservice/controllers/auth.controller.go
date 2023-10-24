@@ -75,6 +75,7 @@ func (ctrl *AuthController) LoginHandler(rw http.ResponseWriter, r *http.Request
 	if err != nil {
 		// This means either the user does not exist
 		ctrl.logger.Warn("User does not exist", zap.String("email", email))
+
 		rw.WriteHeader(http.StatusUnauthorized)
 		rw.Write([]byte("User Does not Exist"))
 		return
