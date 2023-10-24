@@ -1,4 +1,4 @@
-*.env
+**.env
 grpc/
 restuarant/
 */node_modules/

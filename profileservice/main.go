@@ -1,13 +1,13 @@
 package main
 
 import (
-	_ "REST/docs"
-	"REST/internal/auth"
-	"REST/internal/handlers"
-	"REST/internal/models"
 	"fmt"
 	"log"
 	"os"
+	_ "profileservice/docs"
+	"profileservice/internal/handlers"
+	"profileservice/internal/models"
+	"profileservice/internal/services"
 
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
@@ -32,7 +32,7 @@ func main() {
 
 	// Formulate the connection string using the loaded environment variables
 	dsn := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=utf8mb4&parseTime=True&loc=Local", user, pass, host, port, name)
-
+	fmt.Print(dsn)
 	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
 	if err != nil {
 		panic("failed to connect to the database")
@@ -42,15 +42,18 @@ func main() {
 	db.AutoMigrate(&models.Student{}, &models.Professor{}, &models.Course{}, &models.Review{})
 
 	// Initialize and use the auth service
-	authService := auth.New(db)
+	profileService := services.New(db)
 
 	// Initialize the router
 	router := gin.Default()
 
-	authHandler := handlers.NewAuthHandler(authService)
+	profileHandler := handlers.NewProfileHandler(profileService)
 
-	router.POST("/register", authHandler.Register)
-	router.POST("/login", authHandler.Login)
+	router.POST("/create", profileHandler.Create)
+	router.GET("/read/:id", profileHandler.Read)
+	router.PUT("/update/:id", profileHandler.Update)
+	router.DELETE("/delete/:id", profileHandler.Delete)
+
 	// swagger definition
 	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 	router.Run(":8080") // starts the gin server

@@ -1,40 +1,69 @@
 definitions:
-  handlers.LoginRequest:
+  gorm.DeletedAt:
+    properties:
+      time:
+        type: string
+      valid:
+        description: Valid is true if Time is not NULL
+        type: boolean
+    type: object
+  models.LoginRequest:
     properties:
       email:
         type: string
       password:
         type: string
-      userType:
-        type: string
-    required:
-    - email
-    - password
-    - userType
+      role:
+        $ref: '#/definitions/models.Role'
     type: object
-  handlers.RegisterRequest:
+  models.LoginResponse:
+    properties:
+      token:
+        type: string
+      user:
+        $ref: '#/definitions/models.User'
+    type: object
+  models.RegisterRequest:
     properties:
       email:
         type: string
       password:
         type: string
-      userType:
-        type: string
-    required:
-    - email
-    - password
-    - userType
+      role:
+        $ref: '#/definitions/models.Role'
     type: object
-  models.Base:
+  models.RegisterResponse:
     properties:
-      created_at:
+      token:
+        type: string
+      user:
+        $ref: '#/definitions/models.User'
+    type: object
+  models.Role:
+    enum:
+    - 0
+    - 1
+    - 2
+    type: integer
+    x-enum-varnames:
+    - Admin
+    - Student
+    - Professor
+  models.User:
+    properties:
+      createdAt:
         type: string
       deletedAt:
-        format: date-time
+        $ref: '#/definitions/gorm.DeletedAt'
+      email:
         type: string
       id:
         type: integer
-      updated_at:
+      passwordHash:
+        type: string
+      role:
+        $ref: '#/definitions/models.Role'
+      updatedAt:
         type: string
     type: object
 info:
@@ -44,23 +73,29 @@ paths:
     post:
       consumes:
       - application/json
-      description: Login with email, password and user type
+      description: Log in with email and password
       parameters:
       - description: User login info
         in: body
         name: input
         required: true
         schema:
-          $ref: '#/definitions/handlers.LoginRequest'
+          $ref: '#/definitions/models.LoginRequest'
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/models.Base'
+            $ref: '#/definitions/models.LoginResponse'
         "400":
           description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "401":
+          description: Unauthorized
           schema:
             additionalProperties:
               type: string
@@ -71,26 +106,26 @@ paths:
             additionalProperties:
               type: string
             type: object
-      summary: Login an existing user
+      summary: Log in a user and obtain a JWT token
   /register:
     post:
       consumes:
       - application/json
-      description: Register with email, password and user type
+      description: Register a new user with email and password
       parameters:
-      - description: User registration info
+      - description: User register info
         in: body
         name: input
         required: true
         schema:
-          $ref: '#/definitions/handlers.RegisterRequest'
+          $ref: '#/definitions/models.RegisterRequest'
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/models.Base'
+            $ref: '#/definitions/models.RegisterResponse'
         "400":
           description: Bad Request
           schema:

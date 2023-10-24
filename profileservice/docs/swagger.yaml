@@ -1,0 +1,175 @@
+definitions:
+  models.CreateRequest:
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+      userType:
+        type: string
+    required:
+    - email
+    - password
+    - userType
+    type: object
+  models.ResponseModel:
+    type: object
+  models.UpdateRequest:
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+      userType:
+        type: string
+    required:
+    - email
+    - password
+    - userType
+    type: object
+info:
+  contact: {}
+paths:
+  /create:
+    post:
+      consumes:
+      - application/json
+      description: Create a new student or professor with email, password, and user
+        type
+      parameters:
+      - description: User creation info
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/models.CreateRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.ResponseModel'
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Create a new student or professor
+  /delete/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete a student or professor by their ID
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: User Type (student or professor)
+        in: query
+        name: userType
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.ResponseModel'
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Delete a student or professor by ID
+  /read/{id}:
+    get:
+      consumes:
+      - application/json
+      description: Get a student or professor by their ID
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: User Type (student or professor)
+        in: query
+        name: userType
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.ResponseModel'
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Get a student or professor by ID
+  /update/{id}:
+    put:
+      consumes:
+      - application/json
+      description: Update user information with email, password, and user type
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: User update info
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/models.UpdateRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.ResponseModel'
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Update user information
+swagger: "2.0"

@@ -17,14 +17,14 @@ const docTemplate = `{
     "paths": {
         "/login": {
             "post": {
-                "description": "Login with email, password and user type",
+                "description": "Log in with email and password",
                 "consumes": [
                     "application/json"
                 ],
                 "produces": [
                     "application/json"
                 ],
-                "summary": "Login an existing user",
+                "summary": "Log in a user and obtain a JWT token",
                 "parameters": [
                     {
                         "description": "User login info",
@@ -32,7 +32,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/handlers.LoginRequest"
+                            "$ref": "#/definitions/models.LoginRequest"
                         }
                     }
                 ],
@@ -40,11 +40,20 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/models.Base"
+                            "$ref": "#/definitions/models.LoginResponse"
                         }
                     },
                     "400": {
                         "description": "Bad Request",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
                         "schema": {
                             "type": "object",
                             "additionalProperties": {
@@ -66,7 +75,7 @@ const docTemplate = `{
         },
         "/register": {
             "post": {
-                "description": "Register with email, password and user type",
+                "description": "Register a new user with email and password",
                 "consumes": [
                     "application/json"
                 ],
@@ -76,12 +85,12 @@ const docTemplate = `{
                 "summary": "Register a new user",
                 "parameters": [
                     {
-                        "description": "User registration info",
+                        "description": "User register info",
                         "name": "input",
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/handlers.RegisterRequest"
+                            "$ref": "#/definitions/models.RegisterRequest"
                         }
                     }
                 ],
@@ -89,7 +98,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/models.Base"
+                            "$ref": "#/definitions/models.RegisterResponse"
                         }
                     },
                     "400": {
@@ -115,13 +124,20 @@ const docTemplate = `{
         }
     },
     "definitions": {
-        "handlers.LoginRequest": {
+        "gorm.DeletedAt": {
             "type": "object",
-            "required": [
-                "email",
-                "password",
-                "userType"
-            ],
+            "properties": {
+                "time": {
+                    "type": "string"
+                },
+                "valid": {
+                    "description": "Valid is true if Time is not NULL",
+                    "type": "boolean"
+                }
+            }
+        },
+        "models.LoginRequest": {
+            "type": "object",
             "properties": {
                 "email": {
                     "type": "string"
@@ -129,18 +145,24 @@ const docTemplate = `{
                 "password": {
                     "type": "string"
                 },
-                "userType": {
-                    "type": "string"
+                "role": {
+                    "$ref": "#/definitions/models.Role"
                 }
             }
         },
-        "handlers.RegisterRequest": {
+        "models.LoginResponse": {
             "type": "object",
-            "required": [
-                "email",
-                "password",
-                "userType"
-            ],
+            "properties": {
+                "token": {
+                    "type": "string"
+                },
+                "user": {
+                    "$ref": "#/definitions/models.User"
+                }
+            }
+        },
+        "models.RegisterRequest": {
+            "type": "object",
             "properties": {
                 "email": {
                     "type": "string"
@@ -148,25 +170,57 @@ const docTemplate = `{
                 "password": {
                     "type": "string"
                 },
-                "userType": {
-                    "type": "string"
+                "role": {
+                    "$ref": "#/definitions/models.Role"
                 }
             }
         },
-        "models.Base": {
+        "models.RegisterResponse": {
             "type": "object",
             "properties": {
-                "created_at": {
+                "token": {
+                    "type": "string"
+                },
+                "user": {
+                    "$ref": "#/definitions/models.User"
+                }
+            }
+        },
+        "models.Role": {
+            "type": "integer",
+            "enum": [
+                0,
+                1,
+                2
+            ],
+            "x-enum-varnames": [
+                "Admin",
+                "Student",
+                "Professor"
+            ]
+        },
+        "models.User": {
+            "type": "object",
+            "properties": {
+                "createdAt": {
                     "type": "string"
                 },
                 "deletedAt": {
-                    "type": "string",
-                    "format": "date-time"
+                    "$ref": "#/definitions/gorm.DeletedAt"
+                },
+                "email": {
+                    "type": "string"
                 },
                 "id": {
                     "type": "integer"
                 },
-                "updated_at": {
+                "passwordHash": {
+                    "type": "string"
+                },
+                "role": {
+                    "$ref": "#/definitions/models.Role"
+                },
+                "updatedAt": {
                     "type": "string"
                 }
             }
