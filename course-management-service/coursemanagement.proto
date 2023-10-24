@@ -1,5 +1,5 @@
 syntax ="proto3";
-option go_package = "course-management-service/course-management-service";
+option go_package = "course-management-service/coursemanagement";
 
 service CourseManagementService {
     rpc GetAllSubject(Empty) returns (SubjectList) {}
@@ -9,18 +9,35 @@ service CourseManagementService {
     rpc DeleteSubject (SubjectId) returns (Empty) {}
 }
 
+message Professor {
+    string professor_name = 1;
+}
+
+message Prerequisite {
+    string subject_id = 1;
+}
+
 message Empty{}
 
 message SubjectItem {
-    string id =1;
-    string name=2;
-    int32 price=3;
+    string subject_id = 1; // subject id Ex. 2110415
+    string subject_name = 2; // subject name Ex. Software Architecture
+    string course_description = 3; // course contents Ex. [1. Introduction to Software Architecture]
+    string faculty_department = 4; // department name Ex. Computer Engineering
+    string academic_term = 5; // term name Ex. 1 , 2 , summer
+    int32 academic_year = 6; // year of term Ex. 2563
+    repeated Professor professors = 7; // professors name Ex. [somchai jaidee]
+    repeated Prerequisite prerequisites = 8; // subject id Ex. [2110416]
+    string status = 9; // subject status Ex. open , close
+    string curriculum_name = 10; // computer engineering
+    string degree_level = 11; // bachelor , master , doctor
+    int32 teaching_hours = 12; // teaching hours Ex. 3
 }
 
 message SubjectList{
-    repeated SubjectItem subject=1;
+    repeated SubjectItem subject=1; // subject list
 }
 
 message SubjectId{
-    string id=1;
+    string subject_id=1; // subject id Ex. 2110415
 }
