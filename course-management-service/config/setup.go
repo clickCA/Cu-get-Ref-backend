@@ -1,6 +1,7 @@
 package config
 
 import (
+	"course-management-service/models"
 	"log"
 
 	"gorm.io/driver/mysql"
@@ -20,6 +21,12 @@ func ConnectDB() *gorm.DB {
 	if err != nil {
 		log.Fatal("Error connecting to database")
 	}
+
+	err = db.AutoMigrate(&models.Subject{})
+	if err != nil {
+		log.Fatal("Error migrating database")
+	}
+
 	return db
 }
 
