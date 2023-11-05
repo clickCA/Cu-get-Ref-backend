@@ -6,6 +6,9 @@ import (
 	course_management "course-management-service/coursemanagement"
 	"course-management-service/models"
 	"log"
+
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
 )
 
 type Server struct {
@@ -18,7 +21,14 @@ func (s *Server) GetAllCourses(ctx context.Context, req *course_management.Empty
 	log.Println("GetAllCourses")
 	// Get all course in database
 	var courses []models.Course
-	db.Find(&courses)
+	result := db.Find(&courses)
+	if result.Error != nil {
+		err := status.Errorf(
+			codes.Internal,
+			"Could not find courses",
+		)
+		return nil, err
+	}
 	// Convert to protobuf
 	var courseList []*course_management.CourseItem
 	for _, subject := range courses {
@@ -47,7 +57,15 @@ func (s *Server) GetCourse(ctx context.Context, req *course_management.CourseId)
 	log.Println("GetCourse", req.GetCourseId())
 	// Get course in database
 	var course models.Course
-	db.First(&course, req.GetCourseId())
+	result := db.First(&course, req.GetCourseId())
+	if result.Error != nil {
+		err := status.Errorf(
+			codes.NotFound,
+			"Could not find course with ID: %s",
+			req.GetCourseId(),
+		)
+		return nil, err
+	}
 	// Convert to protobuf
 	courseItem := &course_management.CourseItem{
 		CourseId:          course.CourseId,
@@ -84,7 +102,15 @@ func (s *Server) AddNewCourse(ctx context.Context, req *course_management.Course
 		req.GetTeachingHours(),
 	)
 	// Add new course to database
-	db.Create(&course)
+	result := db.Create(&course)
+	if result.Error != nil {
+		err := status.Errorf(
+			codes.Internal,
+			"Could not create new course with ID: %s",
+			req.GetCourseId(),
+		)
+		return nil, err
+	}
 	// Return
 	return &course_management.CourseItem{
 		CourseId:          course.CourseId,
@@ -106,7 +132,15 @@ func (s *Server) UpdateCourseDetail(ctx context.Context, req *course_management.
 	log.Println("UpdateCourseDetail")
 	// Get course in database
 	var course models.Course
-	db.First(&course, req.GetCourseId())
+	result := db.First(&course, req.GetCourseId())
+	if result.Error != nil {
+		err := status.Errorf(
+			codes.NotFound,
+			"Could not find course with ID: %s",
+			req.GetCourseId(),
+		)
+		return nil, err
+	}
 	// Update course
 	course.CourseName = req.GetCourseName()
 	course.CourseDescription = req.GetCourseDescription()
@@ -117,7 +151,15 @@ func (s *Server) UpdateCourseDetail(ctx context.Context, req *course_management.
 	course.CurriculumName = req.GetCurriculumName()
 	course.DegreeLevel = req.GetDegreeLevel()
 	course.TeachingHours = req.GetTeachingHours()
-	db.Save(&course)
+	result = db.Save(&course)
+	if result.Error != nil {
+		err := status.Errorf(
+			codes.Internal,
+			"Could not update course with ID: %s",
+			req.GetCourseId(),
+		)
+		return nil, err
+	}
 	// Return
 	return &course_management.CourseItem{
 		CourseId:          course.CourseId,
@@ -139,9 +181,25 @@ func (s *Server) DeleteCourse(ctx context.Context, req *course_management.Course
 	log.Println("DeleteCourse", req.GetCourseId())
 	// Get course in database
 	var course models.Course
-	db.First(&course, req.GetCourseId())
+	result := db.First(&course, req.GetCourseId())
+	if result.Error != nil {
+		err := status.Errorf(
+			codes.NotFound,
+			"Could not find course with ID: %s",
+			req.GetCourseId(),
+		)
+		return nil, err
+	}
 	// Delete course
-	db.Delete(&course)
+	result = db.Delete(&course)
+	if result.Error != nil {
+		err := status.Errorf(
+			codes.Internal,
+			"Could not delete course with ID: %s",
+			req.GetCourseId(),
+		)
+		return nil, err
+	}
 	// Return
 	return &course_management.Empty{}, nil
 }
