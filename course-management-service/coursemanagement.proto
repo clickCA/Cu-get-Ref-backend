@@ -2,11 +2,11 @@ syntax ="proto3";
 option go_package = "course-management-service/course_management";
 
 service CourseManagementService {
-    rpc GetAllSubject(Empty) returns (SubjectList) {}
-    rpc GetSubject (SubjectId) returns (SubjectItem) {}
-    rpc AddNewSubject (SubjectItem) returns (SubjectItem) {}
-    rpc UpdateSubjectDetail (SubjectItem) returns (SubjectItem) {}
-    rpc DeleteSubject (SubjectId) returns (Empty) {}
+    rpc GetAllCourses (Empty) returns (CourseList) {}
+    rpc GetCourse (CourseId) returns (CourseItem) {}
+    rpc AddNewCourse (CourseItem) returns (CourseItem) {}
+    rpc UpdateCourseDetail (CourseItem) returns (CourseItem) {}
+    rpc DeleteCourse (CourseId) returns (Empty) {}
 }
 
 message Professor {
@@ -14,30 +14,30 @@ message Professor {
 }
 
 message Prerequisite {
-    string subject_id = 1;
+    string course_id = 1;
 }
 
 message Empty{}
 
-message SubjectItem {
-    string subject_id = 1; // subject id Ex. 2110415
-    string subject_name = 2; // subject name Ex. Software Architecture
+message CourseItem {
+    string course_id = 1; // course id Ex. 2110415
+    string course_name = 2; // course name Ex. Software Architecture
     string course_description = 3; // course contents Ex. [1. Introduction to Software Architecture]
     string faculty_department = 4; // department name Ex. Computer Engineering
     string academic_term = 5; // term name Ex. 1 , 2 , summer
     int32 academic_year = 6; // year of term Ex. 2563
     repeated Professor professors = 7; // professors name Ex. [somchai jaidee]
-    repeated Prerequisite prerequisites = 8; // subject id Ex. [2110416]
-    string status = 9; // subject status Ex. open , close
+    repeated Prerequisite prerequisites = 8; // course id Ex. [2110416]
+    string status = 9; // course status Ex. open , close
     string curriculum_name = 10; // computer engineering
     string degree_level = 11; // bachelor , master , doctor
     int32 teaching_hours = 12; // teaching hours Ex. 3
 }
 
-message SubjectList{
-    repeated SubjectItem subject=1; // subject list
+message CourseList{
+    repeated CourseItem course=1; // course list
 }
 
-message SubjectId{
-    string subject_id=1; // subject id Ex. 2110415
+message CourseId{
+    string course_id=1; // course id Ex. 2110415
 }
