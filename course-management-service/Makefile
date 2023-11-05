@@ -8,3 +8,6 @@ generate_grpc_code:
 
 dev:
 	go run main.go
+
+build:
+	go build -o course-management-service.exe main.go
