@@ -1,8 +1,8 @@
 package models
 
-type Subject struct {
-	SubjectId         string `gorm:"primaryKey"`
-	SubjectName       string
+type Course struct {
+	CourseId          string `gorm:"primaryKey"`
+	CourseName        string
 	CourseDescription string
 	FacultyDepartment string
 	AcademicTerm      string

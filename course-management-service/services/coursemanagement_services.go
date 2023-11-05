@@ -14,18 +14,18 @@ type Server struct {
 
 var db = config.ConnectDB()
 
-func (s *Server) GetAllSubject(ctx context.Context, req *course_management.Empty) (*course_management.SubjectList, error) {
+func (s *Server) GetAllSubject(ctx context.Context, req *course_management.Empty) (*course_management.CourseList, error) {
 	log.Println("[Maintenance] GetAllSubject")
-	return &course_management.SubjectList{}, nil
+	return &course_management.CourseList{}, nil
 }
 
-func (s *Server) GetSubject(ctx context.Context, req *course_management.SubjectId) (*course_management.SubjectItem, error) {
-	log.Println("GetSubject", req.GetSubjectId())
-	var subject models.Subject
-	db.First(&subject, "subject_id = ?", req.GetSubjectId())
-	return &course_management.SubjectItem{
-		SubjectId:         subject.SubjectId,
-		SubjectName:       subject.SubjectName,
+func (s *Server) GetSubject(ctx context.Context, req *course_management.CourseId) (*course_management.CourseItem, error) {
+	log.Println("GetSubject", req.GetCourseId())
+	var subject models.Course
+	db.First(&subject, "subject_id = ?", req.GetCourseId())
+	return &course_management.CourseItem{
+		CourseId:          subject.CourseId,
+		CourseName:        subject.CourseName,
 		CourseDescription: subject.CourseDescription,
 		FacultyDepartment: subject.FacultyDepartment,
 		AcademicTerm:      subject.AcademicTerm,
@@ -39,11 +39,11 @@ func (s *Server) GetSubject(ctx context.Context, req *course_management.SubjectI
 	}, nil
 }
 
-func (s *Server) AddNewSubject(ctx context.Context, req *course_management.SubjectItem) (*course_management.SubjectItem, error) {
-	log.Println("AddNewSubject", req.GetSubjectId())
-	subject := models.Subject{
-		SubjectId:         req.GetSubjectId(),
-		SubjectName:       req.GetSubjectName(),
+func (s *Server) AddNewSubject(ctx context.Context, req *course_management.CourseItem) (*course_management.CourseItem, error) {
+	log.Println("AddNewSubject", req.GetCourseId())
+	subject := models.Course{
+		CourseId:          req.GetCourseId(),
+		CourseName:        req.GetCourseName(),
 		CourseDescription: req.GetCourseDescription(),
 		FacultyDepartment: req.GetFacultyDepartment(),
 		AcademicTerm:      req.GetAcademicTerm(),
@@ -56,9 +56,9 @@ func (s *Server) AddNewSubject(ctx context.Context, req *course_management.Subje
 		TeachingHours:     req.GetTeachingHours(),
 	}
 	db.Create(&subject)
-	return &course_management.SubjectItem{
-		SubjectId:         req.GetSubjectId(),
-		SubjectName:       req.GetSubjectName(),
+	return &course_management.CourseItem{
+		CourseId:          req.GetCourseId(),
+		CourseName:        req.GetCourseName(),
 		CourseDescription: req.GetCourseDescription(),
 		FacultyDepartment: req.GetFacultyDepartment(),
 		AcademicTerm:      req.GetAcademicTerm(),
@@ -72,12 +72,12 @@ func (s *Server) AddNewSubject(ctx context.Context, req *course_management.Subje
 	}, nil
 }
 
-func (s *Server) UpdateSubjectDetail(ctx context.Context, req *course_management.SubjectItem) (*course_management.SubjectItem, error) {
+func (s *Server) UpdateSubjectDetail(ctx context.Context, req *course_management.CourseItem) (*course_management.CourseItem, error) {
 	log.Println("UpdateSubjectDetail")
 	log.Println("Updating ", req.String())
-	subject := models.Subject{
-		SubjectId:         req.GetSubjectId(),
-		SubjectName:       req.GetSubjectName(),
+	subject := models.Course{
+		CourseId:          req.GetCourseId(),
+		CourseName:        req.GetCourseName(),
 		CourseDescription: req.GetCourseDescription(),
 		FacultyDepartment: req.GetFacultyDepartment(),
 		AcademicTerm:      req.GetAcademicTerm(),
@@ -90,9 +90,9 @@ func (s *Server) UpdateSubjectDetail(ctx context.Context, req *course_management
 		TeachingHours:     req.GetTeachingHours(),
 	}
 	db.Save(&subject)
-	return &course_management.SubjectItem{
-		SubjectId:         req.GetSubjectId(),
-		SubjectName:       req.GetSubjectName(),
+	return &course_management.CourseItem{
+		CourseName:        req.GetCourseId(),
+		CourseId:          req.GetCourseName(),
 		CourseDescription: req.GetCourseDescription(),
 		FacultyDepartment: req.GetFacultyDepartment(),
 		AcademicTerm:      req.GetAcademicTerm(),
@@ -106,9 +106,9 @@ func (s *Server) UpdateSubjectDetail(ctx context.Context, req *course_management
 	}, nil
 }
 
-func (s *Server) DeleteSubject(ctx context.Context, req *course_management.SubjectId) (*course_management.Empty, error) {
+func (s *Server) DeleteSubject(ctx context.Context, req *course_management.CourseId) (*course_management.Empty, error) {
 	log.Println("DeleteSubject")
-	log.Println("Deleting ", req.GetSubjectId())
-	db.Delete(&models.Subject{}, req.GetSubjectId())
+	log.Println("Deleting ", req.GetCourseId())
+	db.Delete(&models.Course{}, req.GetCourseId())
 	return &course_management.Empty{}, nil
 }
