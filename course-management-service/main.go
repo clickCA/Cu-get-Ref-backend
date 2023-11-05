@@ -6,7 +6,6 @@ import (
 	"log"
 	"net"
 
-	"github.com/joho/godotenv"
 	"google.golang.org/grpc"
 )
 
@@ -15,15 +14,8 @@ const (
 )
 
 func main() {
-	// Load environment variables from .env
-	err := godotenv.Load()
-	if err != nil {
-		log.Fatalf("failed to load env: %v", err)
-	}
-	// MysqlConnectionString := os.Getenv("DB_HOST")
-	
 	// Create a TCP listener on port 50051
-	lis, err := net.Listen("tcp",port)
+	lis, err := net.Listen("tcp", port)
 	if err != nil {
 		log.Fatalf("failed to listen: %v", err)
 	}
