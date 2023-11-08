@@ -10,10 +10,10 @@ import (
 func EnvMySqlURI() string {
 	err := godotenv.Load()
 	if err != nil {
-		log.Fatal("Error loading .env file: DB_HOST")
+		log.Fatal("Error loading .env file")
 	}
 
-	return os.Getenv("DB_HOST")
+	return os.Getenv("DB_CONNECTION")
 }
 
 func EnvServerPort() string {

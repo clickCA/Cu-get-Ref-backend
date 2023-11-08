@@ -12,7 +12,7 @@ import (
 
 func main() {
 	// Create a TCP listener on port
-	port := config.EnvServerPort()
+	port := ":" + config.EnvServerPort()
 	lis, err := net.Listen("tcp", port)
 	if err != nil {
 		log.Fatalf("failed to listen: %v", err)

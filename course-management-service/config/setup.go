@@ -12,10 +12,6 @@ func ConnectDB() *gorm.DB {
 	// Get database credentials from .env file
 	dsn := EnvMySqlURI()
 
-	if dsn == "" {
-		log.Fatal("DB_HOST not found in .env file")
-	}
-
 	// Connect to MySQL
 	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
 	if err != nil {
