@@ -1,6 +1,6 @@
 version: '0.1'
 services:
-  db:
+  authservice-db:
     image: mysql:8.0
     restart: always
     environment:
