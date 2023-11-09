@@ -1,40 +1,68 @@
-version: '0.1'
+version: '3.7'
 services:
+  auth_service:
+    build: ./authservice
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+
+  course_service:
+    build: ./course-management-service
+    restart: unless-stopped
+    ports:
+      - '8080:8080'
+    depends_on:
+      course_db:
+        condition: service_healthy
+
+  review_consumer:
+    build: ./review-consumer
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+      db:
+        condition: service_healthy
+
+  review_publisher:
+    build: ./review-publisher
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+
   db:
     image: mysql:8.0
     restart: always
     environment:
       MYSQL_DATABASE: 'authservice_db'
-      # So you don't have to use root, but you can if you like
       MYSQL_USER: 'user'
-      # You can use whatever password you like
       MYSQL_PASSWORD: 'password'
-      # Password for root access
       MYSQL_ROOT_PASSWORD: 'password'
-    ports:
-      # <Port exposed> : <MySQL Port running inside container>
-      - '3307:3306'
     expose:
-      # Opens port 3306 on the container
       - '3306'
-      # Where our data will be persisted
     volumes:
       - my-db:/var/lib/mysql
+    healthcheck:
+      test: ['CMD', 'mysqladmin', 'ping', '-h', 'localhost']
+      timeout: 20s
+      retries: 10
 
   course_db:
     image: mysql:8.0
-    restart: always
+    restart: unless-stopped
     environment:
       MYSQL_DATABASE: 'courseservice_db'
       MYSQL_USER: 'user'
       MYSQL_PASSWORD: 'password'
       MYSQL_ROOT_PASSWORD: 'password'
-    ports:
-      - '3308:3306'
     expose:
       - '3306'
     volumes:
-      - my-course-db:/var/lib/mysql
+      - course-db:/var/lib/mysql
+    healthcheck:
+      test: ['CMD', 'mysqladmin', 'ping', '-h', 'localhost']
+      timeout: 20s
+      retries: 10
 
   mongo:
     image: mongo:7-jammy
@@ -43,23 +71,30 @@ services:
       MONGO_INITDB_ROOT_USERNAME: root
       MONGO_INITDB_ROOT_PASSWORD: password
       MONGO_INITDB_DATABASE: db
-    ports:
-      - '27018:27017'
     expose:
       - '27017'
     volumes:
       - mongo-db:/data/db
+    healthcheck:
+      test: echo 'db.runCommand("ping").ok' | mongosh localhost:27017/test --quiet
+
   rabbitmq:
     image: rabbitmq:3-management-alpine
     container_name: 'rabbitmq'
-    ports:
-      - 5672:5672
-      - 15672:15672
+    expose:
+      - '5672'
+      - '15672'
     volumes:
       - ./vol/rabbitmq/data/:/var/lib/rabbitmq/
       - ./vol/rabbitmq/log/:/var/log/rabbitmq
+    healthcheck:
+      test: rabbitmq-diagnostics -q ping
+      interval: 30s
+      timeout: 30s
+      retries: 3
+
 # Names our volume
 volumes:
   my-db:
-  my-course-db:
   mongo-db:
+  course-db:
