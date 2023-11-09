@@ -1,0 +1,140 @@
+_format_version: "3.0"
+consumers:
+- jwt_secrets:
+  - algorithm: HS256
+    key: QocrYmZG8tCV3ROT2QO2qnRwlB9q8lgc
+    secret: secret
+  - algorithm: HS256
+    key: key
+    secret: FmYJI5GOX1yAgTksMWD9J2zxyQiCf8FP
+  - algorithm: HS256
+    key: aLxVWGCordLwX7CYOWbVtDp5I54tXNrJ
+    secret: R60LCNzBIRfKpGj43V2usCvhdcS4F2su
+  keyauth_credentials:
+  - key: dk627EXCU1lxfRLUVO9W2eJJ090Cxrig
+  username: admin
+services:
+- connect_timeout: 60000
+  enabled: true
+  host: jsonplaceholder.typicode.com
+  name: JSON-Placeholder
+  path: /
+  port: 443
+  protocol: https
+  read_timeout: 60000
+  retries: 5
+  routes:
+  - https_redirect_status_code: 426
+    name: Photos
+    path_handling: v1
+    paths:
+    - /photos
+    preserve_host: false
+    protocols:
+    - http
+    - https
+    regex_priority: 0
+    request_buffering: true
+    response_buffering: true
+    strip_path: true
+  - https_redirect_status_code: 426
+    name: Posts
+    path_handling: v1
+    paths:
+    - /posts
+    preserve_host: false
+    protocols:
+    - http
+    - https
+    regex_priority: 0
+    request_buffering: true
+    response_buffering: true
+    strip_path: true
+  - https_redirect_status_code: 426
+    name: Todos
+    path_handling: v1
+    paths:
+    - /todos
+    plugins:
+    - config:
+        anonymous: null
+        hide_credentials: false
+        key_in_body: false
+        key_in_header: true
+        key_in_query: true
+        key_names:
+        - x-api-key
+        run_on_preflight: true
+      enabled: true
+      name: key-auth
+      protocols:
+      - grpc
+      - grpcs
+      - http
+      - https
+    preserve_host: false
+    protocols:
+    - http
+    - https
+    regex_priority: 0
+    request_buffering: true
+    response_buffering: true
+    strip_path: true
+  - https_redirect_status_code: 426
+    name: Users
+    path_handling: v1
+    paths:
+    - /users
+    plugins:
+    - config:
+        anonymous: null
+        claims_to_verify: null
+        cookie_names: []
+        header_names:
+        - authorization
+        key_claim_name: iss
+        maximum_expiration: 0
+        run_on_preflight: true
+        secret_is_base64: false
+        uri_param_names:
+        - jwt
+      enabled: true
+      name: jwt
+      protocols:
+      - grpc
+      - grpcs
+      - http
+      - https
+    preserve_host: false
+    protocols:
+    - http
+    - https
+    regex_priority: 0
+    request_buffering: true
+    response_buffering: true
+    strip_path: true
+  write_timeout: 60000
+- connect_timeout: 60000
+  enabled: true
+  host: 192.168.1.44
+  name: mock
+  path: /
+  port: 8080
+  protocol: http
+  read_timeout: 60000
+  retries: 5
+  routes:
+  - https_redirect_status_code: 426
+    name: Login
+    path_handling: v1
+    paths:
+    - /login
+    preserve_host: false
+    protocols:
+    - http
+    - https
+    regex_priority: 0
+    request_buffering: true
+    response_buffering: true
+    strip_path: false
+  write_timeout: 60000
