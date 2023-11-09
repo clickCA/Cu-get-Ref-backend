@@ -87,24 +87,46 @@ func (s *Server) GetCourse(ctx context.Context, req *course_management.CourseId)
 
 func (s *Server) AddNewCourse(ctx context.Context, req *course_management.CourseItem) (*course_management.CourseItem, error) {
 	log.Print("AddNewCourse")
-	course := models.NewCourse(
+	// Create new course
+	// Map professors
+	var professors []models.Professor
+	for _, professor := range req.GetProfessors() {
+		professors = append(professors, models.Professor{
+			ProfessorName: professor.GetProfessorName(),
+		})
+	}
+	// Map prerequisites
+	var prerequisites []models.Prerequisite
+	for _, prerequisite := range req.GetPrerequisites() {
+		prerequisites = append(prerequisites, models.Prerequisite{
+			PrerequisiteId: prerequisite.GetCourseId(),
+		})
+	}
+	course, err := models.NewCourse(
 		req.GetCourseId(),
 		req.GetCourseName(),
 		req.GetCourseDescription(),
 		req.GetFacultyDepartment(),
 		req.GetAcademicTerm(),
 		req.GetAcademicYear(),
-		"test",
-		"test",
+		professors,
+		prerequisites,
 		req.GetStatus(),
 		req.GetCurriculumName(),
 		req.GetDegreeLevel(),
 		req.GetTeachingHours(),
 	)
+	if err != nil {
+		err = status.Errorf(
+			codes.InvalidArgument,
+			err.Error(),
+		)
+		return nil, err
+	}
 	// Add new course to database
 	result := db.Create(&course)
 	if result.Error != nil {
-		err := status.Errorf(
+		err = status.Errorf(
 			codes.Internal,
 			"Could not create new course with ID: %s",
 			req.GetCourseId(),
@@ -119,8 +141,8 @@ func (s *Server) AddNewCourse(ctx context.Context, req *course_management.Course
 		FacultyDepartment: course.FacultyDepartment,
 		AcademicTerm:      course.AcademicTerm,
 		AcademicYear:      course.AcademicYear,
-		Professors:        []*course_management.Professor{},
-		Prerequisites:     []*course_management.Prerequisite{},
+		Professors:        req.GetProfessors(),
+		Prerequisites:     req.GetPrerequisites(),
 		Status:            course.Status,
 		CurriculumName:    course.CurriculumName,
 		DegreeLevel:       course.DegreeLevel,
