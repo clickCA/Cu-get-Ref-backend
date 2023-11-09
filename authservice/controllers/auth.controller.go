@@ -80,6 +80,7 @@ func (ctrl *AuthController) LoginHandler(rw http.ResponseWriter, r *http.Request
 		rw.Write([]byte("User Does not Exist"))
 		return
 	}
+	ctrl.logger.Info("User logged in", zap.String("user", user.Email))
 
 	// If the user exists, we sign the token
 	tokenString, err := ctrl.authservice.GetSignedToken()
@@ -94,7 +95,7 @@ func (ctrl *AuthController) LoginHandler(rw http.ResponseWriter, r *http.Request
 	// Return the token in the response
 	rw.WriteHeader(http.StatusOK)
 	// Return the user object in the response
-	response := models.LoginResponse{User: user, Token: tokenString}
+	response := models.LoginResponse{Token: tokenString}
 	json.NewEncoder(rw).Encode(response)
 
 }

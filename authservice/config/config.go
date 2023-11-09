@@ -17,6 +17,7 @@ type Config struct {
 	DBPass     string `mapstructure:"DB_PASS"`
 	DBName     string `mapstructure:"DB_NAME"`
 	JWT_SECRET string `mapstructure:"JWT_SECRET"`
+	JWT_KEY    string `mapstructure:"JWT_KEY"`
 }
 
 func LoadConfig(path string) (config Config, err error) {
@@ -58,10 +59,11 @@ func ConnectDB() (*gorm.DB, error) {
 
 	return db, nil
 }
-func GetSecret() string {
+
+func GetJWTSecret() ([]byte, string) {
 	config, err := LoadConfig("./config")
 	if err != nil {
 		log.Printf("Error loading config: %v", err)
 	}
-	return config.JWT_SECRET
+	return []byte(config.JWT_SECRET), config.JWT_KEY
 }

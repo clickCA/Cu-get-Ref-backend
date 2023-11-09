@@ -6,7 +6,6 @@ type LoginRequest struct {
 	Role     Role   `json:"role"`
 }
 type LoginResponse struct {
-	User  *User
 	Token string `json:"token"`
 }
 
@@ -17,6 +16,5 @@ type RegisterRequest struct {
 }
 
 type RegisterResponse struct {
-	User  *User
-	Token string `json:"token"`
+	User *User
 }
