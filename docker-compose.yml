@@ -1,5 +1,25 @@
 version: '0.1'
 services:
+  profileservice-db:
+    image: mysql:8.0
+    restart: always
+    environment:
+      MYSQL_DATABASE: 'profileservice_db'
+      # So you don't have to use root, but you can if you like
+      MYSQL_USER: 'user'
+      # You can use whatever password you like
+      MYSQL_PASSWORD: 'password'
+      # Password for root access
+      MYSQL_ROOT_PASSWORD: 'password'
+    ports:
+      # <Port exposed> : <MySQL Port running inside container>
+      - '3308:3306'
+    expose:
+      # Opens port 3306 on the container
+      - '3306'
+      # Where our data will be persisted
+    volumes:
+      - mysql-db:/var/lib/profileservice
   authservice-db:
     image: mysql:8.0
     restart: always
@@ -19,7 +39,7 @@ services:
       - '3306'
       # Where our data will be persisted
     volumes:
-      - my-db:/var/lib/mysql
+      - mysql-db:/var/lib/authservice
   mongo:
     image: mongo:7-jammy
     restart: always
@@ -105,7 +125,7 @@ services:
       - NODE_ENV=production
 # Names our volume
 volumes:
-  my-db:
+  mysql-db:
   mongo-db:
   db-data-kong-postgres:
 
