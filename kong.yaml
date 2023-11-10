@@ -117,7 +117,7 @@ services:
 - connect_timeout: 60000
   enabled: true
   host: 192.168.1.44
-  name: mock
+  name: authservice
   path: /
   port: 8080
   protocol: http
@@ -129,6 +129,82 @@ services:
     path_handling: v1
     paths:
     - /login
+    preserve_host: false
+    protocols:
+    - http
+    - https
+    regex_priority: 0
+    request_buffering: true
+    response_buffering: true
+    strip_path: false
+  - https_redirect_status_code: 426
+    name: Register
+    path_handling: v1
+    paths:
+    - /register
+    preserve_host: false
+    protocols:
+    - http
+    - https
+    regex_priority: 0
+    request_buffering: true
+    response_buffering: true
+    strip_path: false
+  write_timeout: 60000
+- connect_timeout: 60000
+  enabled: true
+  host: 192.168.1.44
+  name: profileservice
+  path: /
+  port: 8081
+  protocol: http
+  read_timeout: 60000
+  retries: 5
+  routes:
+  - https_redirect_status_code: 426
+    name: createprofile
+    path_handling: v1
+    paths:
+    - /create
+    preserve_host: false
+    protocols:
+    - http
+    - https
+    regex_priority: 0
+    request_buffering: true
+    response_buffering: true
+    strip_path: false
+  - https_redirect_status_code: 426
+    name: deleteprofile
+    path_handling: v1
+    paths:
+    - /delete/\d+
+    preserve_host: false
+    protocols:
+    - http
+    - https
+    regex_priority: 0
+    request_buffering: true
+    response_buffering: true
+    strip_path: false
+  - https_redirect_status_code: 426
+    name: readprofile
+    path_handling: v1
+    paths:
+    - /read/\d+
+    preserve_host: false
+    protocols:
+    - http
+    - https
+    regex_priority: 0
+    request_buffering: true
+    response_buffering: true
+    strip_path: false
+  - https_redirect_status_code: 426
+    name: updateprofile
+    path_handling: v1
+    paths:
+    - '/update/\d+ '
     preserve_host: false
     protocols:
     - http
