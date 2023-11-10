@@ -1,12 +1,12 @@
 package services
 
 import (
-	"authservice/jwt"
+	"authservice/config"
 	"authservice/models"
 	"errors"
-	"fmt"
 	"time"
 
+	"github.com/golang-jwt/jwt/v5"
 	"golang.org/x/crypto/bcrypt"
 	"gorm.io/gorm"
 )
@@ -58,26 +58,24 @@ func (s *AuthService) Login(email, password string, role models.Role) (*models.U
 }
 
 func (s *AuthService) GetSignedToken() (string, error) {
-	// we make a JWT Token here with signing method of ES256 and claims.
-	// claims are attributes.
-	// Aud - audience
-	// Iss - issuer
-	// Exp - expiration of the Token
-	claimsMap := jwt.ClaimsMap{
-		Aud: "cugetref.org",
-		Iss: "cugetref.org",
-		Exp: fmt.Sprint(time.Now().Add(time.Minute * 1).Unix()),
+	// Your shared secret
+	secret, key := config.GetJWTSecret()
+	// Create the Claims
+	claims := jwt.MapClaims{
+		"iss": key,
+		"iat": time.Now().Unix(),
+		"exp": time.Now().Add(30 * time.Minute).Unix(),
+		"aud": "cugetref.org",
 	}
 
-	secret := jwt.GetSecret()
-	if secret == "" {
-		return "", errors.New("empty JWT secret")
-	}
+	// Create the token with HS256 algorithm
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 
-	header := "HS256"
-	tokenString, err := jwt.GenerateToken(header, claimsMap, secret)
+	// Sign the token with your shared secret
+	tokenString, err := token.SignedString(secret)
 	if err != nil {
-		return tokenString, err
+		return "", err
 	}
+
 	return tokenString, nil
 }

@@ -56,5 +56,5 @@ func main() {
 
 	// swagger definition
 	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
-	router.Run(":8080") // starts the gin server
+	router.Run(":8081") // starts the gin server
 }
