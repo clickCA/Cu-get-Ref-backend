@@ -7,7 +7,7 @@ import (
 // User struct
 type User struct {
 	gorm.Model
-	Email        string `gorm:"uniqueIndex"`
+	Email        string `gorm:"index:,unique"`
 	PasswordHash string
 	Role         Role
 }
