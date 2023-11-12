@@ -37,7 +37,7 @@ func main() {
 	// Define the signup and signin routes
 	r.POST("/register", gin.WrapF(AuthController.RegisterHandler))
 	r.POST("/login", gin.WrapF(AuthController.LoginHandler))
-	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler, ginSwagger.URL("http://localhost:8080/swagger/doc.json")))
+	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 	// Start the server
 
 	logger.Info("Server started on :8080")
