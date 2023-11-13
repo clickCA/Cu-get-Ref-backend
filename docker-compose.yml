@@ -4,6 +4,8 @@ services:
   profile_service:
     build: ./profileservice
     restart: unless-stopped
+    ports:
+      - 10001:8081
     expose:
       - '8081'
     depends_on:
@@ -13,6 +15,8 @@ services:
   auth_service:
     build: ./authservice
     restart: unless-stopped
+    ports:
+      - 10002:8080
     expose:
       - '8080'
     depends_on:
@@ -22,6 +26,8 @@ services:
   course_service:
     build: ./course-management-service
     restart: unless-stopped
+    ports:
+      - 10003:8080
     expose:
       - '8080'
     depends_on:
@@ -38,6 +44,8 @@ services:
 
   review_publisher:
     build: ./review-publisher
+    ports:
+      - 10004:8080
     expose:
       - '8080'
     depends_on:
@@ -109,6 +117,8 @@ services:
       MONGO_INITDB_ROOT_USERNAME: root
       MONGO_INITDB_ROOT_PASSWORD: password
       MONGO_INITDB_DATABASE: db
+    ports:
+      - 27018:27017
     expose:
       - '27017'
     volumes:
@@ -183,6 +193,8 @@ services:
       - 8444:8444
     links:
       - kong-database:kong-database
+    volumes:
+      - './kong/protobuf:/usr/local/kong/protobuf'
     depends_on:
       - kong-migrations
 
