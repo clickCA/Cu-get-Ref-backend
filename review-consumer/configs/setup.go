@@ -4,9 +4,10 @@ import (
 	"context"
 	"fmt"
 	"log"
-	"review-consumer/utils"
+	"review-consumer/models"
 	"time"
 
+	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
@@ -41,8 +42,18 @@ func GetCollection(client *mongo.Client, collectionName string) *mongo.Collectio
 	return collection
 }
 
-func InsertOneJson(jsonObject string, collection *mongo.Collection) {
+func InsertOneObj(reqObj models.ReviewReq, collection *mongo.Collection) {
 
-	object := utils.JsonToObject([]byte(jsonObject))
+	object := models.NewReview(reqObj.COURSE_ID, reqObj.REVIEWER, reqObj.MESSAGE, reqObj.RATING, reqObj.DATE)
 	go collection.InsertOne(context.TODO(), object)
+}
+
+func DeleteOneObj(reqObj models.ReviewReq, collection *mongo.Collection) {
+
+	filter := bson.D{{"course_id", reqObj.COURSE_ID}, {"reviewer", reqObj.REVIEWER}}
+	_, err := collection.DeleteOne(context.TODO(), filter)
+	fmt.Println("deleted", reqObj)
+	if err != nil {
+		panic(err.Error())
+	}
 }
