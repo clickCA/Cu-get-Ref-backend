@@ -27,10 +27,22 @@ func main() {
 	router := gin.Default()
 	router.Use(CORSMiddleware())
 
-	router.POST("/review", func(c *gin.Context) {
-		controllers.CreateReview(c)
+	router.GET("/reviews", func(ctx *gin.Context) {
+		controllers.GetAllReviews(ctx)
 	})
 
-	fmt.Println("running in localhost:8080")
+	router.GET("/reviews/:id", func(ctx *gin.Context) {
+		controllers.GetReview(ctx)
+	})
+
+	router.POST("/reviews", func(ctx *gin.Context) {
+		controllers.CreateReview(ctx)
+	})
+
+	router.DELETE("/reviews", func(ctx *gin.Context) {
+		controllers.DeleteReview(ctx)
+	})
+
+	fmt.Println("running in :8080")
 	router.Run(":8080")
 }

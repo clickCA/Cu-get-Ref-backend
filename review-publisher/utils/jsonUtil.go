@@ -6,7 +6,7 @@ import (
 	"review-consumer/models"
 )
 
-func ObjectTojson(review *models.Review) string {
+func ObjectTojson(review *models.ReviewReq) string {
 
 	var jsonData []byte
 	jsonData, err := json.Marshal(review)
@@ -17,9 +17,9 @@ func ObjectTojson(review *models.Review) string {
 	return string(jsonData)
 }
 
-func JsonToObject(jsonData []byte) models.Review {
+func JsonToObject(jsonData []byte) models.ReviewReq {
 
-	var unreview models.Review
+	var unreview models.ReviewReq
 	_ = json.Unmarshal(jsonData, &unreview)
 
 	return unreview
