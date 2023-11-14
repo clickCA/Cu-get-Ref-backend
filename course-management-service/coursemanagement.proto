@@ -1,12 +1,36 @@
 syntax ="proto3";
 option go_package = "course-management-service/course_management";
 
+import "google/api/annotations.proto"; // Import the annotations.proto file
+
 service CourseManagementService {
-    rpc GetAllCourses (Empty) returns (CourseList) {}
-    rpc GetCourse (CourseId) returns (CourseItem) {}
-    rpc AddNewCourse (CourseItem) returns (CourseItem) {}
-    rpc UpdateCourseDetail (CourseItem) returns (CourseItem) {}
-    rpc DeleteCourse (CourseId) returns (Empty) {}
+    rpc GetAllCourses (Empty) returns (CourseList) {
+        option (google.api.http) = {
+            get: "/v1/courses"
+        };
+    }
+    rpc GetCourse (CourseId) returns (CourseItem) {
+        option (google.api.http) = {
+            get: "/v1/courses/{course_id}"
+        };
+    }
+    rpc AddNewCourse (CourseItem) returns (CourseItem) {
+        option (google.api.http) = {
+            post: "/v1/courses"
+            body: "*"
+        };
+    }
+    rpc UpdateCourseDetail (CourseItem) returns (CourseItem) {
+        option (google.api.http) = {
+            put: "/v1/courses/{course_id}"
+            body: "*"
+        };
+    }
+    rpc DeleteCourse (CourseId) returns (Empty) {
+        option (google.api.http) = {
+            delete: "/v1/courses/{course_id}"
+        };
+    }
 }
 
 message Professor {
