@@ -18,8 +18,15 @@ plugins:
     credentials: true
     exposed_headers: null
     headers:
-    - Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization,
-      accept, origin, Cache-Control, X-Requested-With
+    - Content-Type
+    - Content-Length
+    - Accept-Encoding
+    - X-CSRF-Token
+    - Authorization
+    - accept
+    - origin
+    - Cache-Control
+    - X-Requested-With
     max_age: null
     methods:
     - GET
@@ -33,7 +40,7 @@ plugins:
     - CONNECT
     origins:
     - '*'
-    preflight_continue: false
+    preflight_continue: true
     private_network: false
   enabled: true
   name: cors
