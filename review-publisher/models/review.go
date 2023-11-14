@@ -4,6 +4,14 @@ import (
 	"time"
 )
 
+type Review struct {
+	COURSE_ID string
+	REVIEWER  string
+	DATE      time.Time
+	MESSAGE   string
+	RATING    int
+}
+
 type ReviewRequest struct {
 	Id       string `json:"id"`
 	Reviewer string `json:"reviewer"`

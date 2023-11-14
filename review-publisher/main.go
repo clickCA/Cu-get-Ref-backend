@@ -27,12 +27,8 @@ func main() {
 	router := gin.Default()
 	router.Use(CORSMiddleware())
 
-	router.GET("/reviews", func(ctx *gin.Context) {
-		controllers.GetAllReviews(ctx)
-	})
-
-	router.GET("/reviews/:id", func(ctx *gin.Context) {
-		controllers.GetReview(ctx)
+	router.GET("/reviews/:courseID", func(ctx *gin.Context) {
+		controllers.GetReviewsByCourseID(ctx)
 	})
 
 	router.POST("/reviews", func(ctx *gin.Context) {
