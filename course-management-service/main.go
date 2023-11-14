@@ -7,6 +7,8 @@ import (
 	"log"
 	"net"
 
+	"google.golang.org/grpc/reflection"
+
 	"google.golang.org/grpc"
 )
 
@@ -21,6 +23,9 @@ func main() {
 	// Create a new gRPC server
 	s := grpc.NewServer()
 	services := &services.Server{}
+
+	// Enable Reflection
+    reflection.Register(s)
 
 	// Attach the CourseManagement service to the server
 	course_management.RegisterCourseManagementServiceServer(s, services)
