@@ -1,156 +1,155 @@
-_format_version: "3.0"
+_format_version: '3.0'
 consumers:
-- jwt_secrets:
-  - algorithm: HS256
-    key: key
-    secret: FmYJI5GOX1yAgTksMWD9J2zxyQiCf8FP
-  - algorithm: HS256
-    key: aLxVWGCordLwX7CYOWbVtDp5I54tXNrJ
-    secret: R60LCNzBIRfKpGj43V2usCvhdcS4F2su
-  - algorithm: HS256
-    key: QocrYmZG8tCV3ROT2QO2qnRwlB9q8lgc
-    secret: secret
-  keyauth_credentials:
-  - key: dk627EXCU1lxfRLUVO9W2eJJ090Cxrig
-  username: admin
+  - jwt_secrets:
+      - algorithm: HS256
+        key: key
+        secret: FmYJI5GOX1yAgTksMWD9J2zxyQiCf8FP
+      - algorithm: HS256
+        key: aLxVWGCordLwX7CYOWbVtDp5I54tXNrJ
+        secret: R60LCNzBIRfKpGj43V2usCvhdcS4F2su
+      - algorithm: HS256
+        key: QocrYmZG8tCV3ROT2QO2qnRwlB9q8lgc
+        secret: secret
+    keyauth_credentials:
+      - key: dk627EXCU1lxfRLUVO9W2eJJ090Cxrig
+    username: admin
 plugins:
-- config:
-    credentials: true
-    exposed_headers: null
-    headers:
-    - Content-Type
-    - Content-Length
-    - Accept-Encoding
-    - X-CSRF-Token
-    - Authorization
-    - accept
-    - origin
-    - Cache-Control
-    - X-Requested-With
-    max_age: null
-    methods:
-    - GET
-    - HEAD
-    - PUT
-    - PATCH
-    - POST
-    - DELETE
-    - OPTIONS
-    - TRACE
-    - CONNECT
-    origins:
-    - '*'
-    preflight_continue: true
-    private_network: false
-  enabled: true
-  name: cors
-  protocols:
-  - grpc
-  - grpcs
-  - http
-  - https
-services:
-- connect_timeout: 60000
-  enabled: true
-  host: auth_service
-  name: authservice_v1
-  path: /
-  port: 8080
-  protocol: http
-  read_timeout: 60000
-  retries: 5
-  routes:
-  - https_redirect_status_code: 426
-    name: authservice-route
-    path_handling: v1
-    paths:
-    - /api/v1/authservice
-    preserve_host: false
+  - config:
+      credentials: true
+      exposed_headers: null
+      headers:
+        - Content-Type
+        - Content-Length
+        - Accept-Encoding
+        - X-CSRF-Token
+        - Authorization
+        - accept
+        - origin
+        - Cache-Control
+        - X-Requested-With
+      max_age: null
+      methods:
+        - GET
+        - HEAD
+        - PUT
+        - PATCH
+        - POST
+        - DELETE
+        - OPTIONS
+        - TRACE
+        - CONNECT
+      origins:
+        - '*'
+      preflight_continue: true
+    enabled: true
+    name: cors
     protocols:
-    - http
-    - https
-    regex_priority: 0
-    request_buffering: true
-    response_buffering: true
-    strip_path: true
-  write_timeout: 60000
-- connect_timeout: 60000
-  enabled: true
-  host: course_service
-  name: course-management-service_v1
-  port: 8080
-  protocol: grpc
-  read_timeout: 60000
-  retries: 5
-  routes:
-  - https_redirect_status_code: 426
-    name: coursemanagement-route
-    path_handling: v1
-    paths:
-    - /api/v1/course-management-service
-    plugins:
-    - config:
-        proto: /usr/local/kong/protobuf/coursemanagement.proto
-      enabled: true
-      name: grpc-gateway
-      protocols:
       - grpc
       - grpcs
       - http
       - https
-    preserve_host: false
-    protocols:
-    - http
-    - https
-    regex_priority: 0
-    request_buffering: true
-    response_buffering: true
-    strip_path: true
-  write_timeout: 60000
-- connect_timeout: 60000
-  enabled: true
-  host: profile_service
-  name: profileservice_v1
-  path: /
-  port: 8081
-  protocol: http
-  read_timeout: 60000
-  retries: 5
-  routes:
-  - https_redirect_status_code: 426
-    name: profileservice-route
-    path_handling: v1
-    paths:
-    - /api/v1/profileservice
-    preserve_host: false
-    protocols:
-    - http
-    - https
-    regex_priority: 0
-    request_buffering: true
-    response_buffering: true
-    strip_path: true
-  write_timeout: 60000
-- connect_timeout: 60000
-  enabled: true
-  host: review_publisher
-  name: review-service_v1
-  port: 8080
-  protocol: http
-  read_timeout: 60000
-  retries: 5
-  routes:
-  - https_redirect_status_code: 426
-    name: review-service-route
-    path_handling: v1
-    paths:
-    - /api/v1/reviewservice
-    preserve_host: false
-    protocols:
-    - http
-    - https
-    regex_priority: 0
-    request_buffering: true
-    response_buffering: true
-    strip_path: true
-  write_timeout: 60000
+services:
+  - connect_timeout: 60000
+    enabled: true
+    host: auth_service
+    name: authservice_v1
+    path: /
+    port: 8080
+    protocol: http
+    read_timeout: 60000
+    retries: 5
+    routes:
+      - https_redirect_status_code: 426
+        name: authservice-route
+        path_handling: v1
+        paths:
+          - /api/v1/authservice
+        preserve_host: false
+        protocols:
+          - http
+          - https
+        regex_priority: 0
+        request_buffering: true
+        response_buffering: true
+        strip_path: true
+    write_timeout: 60000
+  - connect_timeout: 60000
+    enabled: true
+    host: course_service
+    name: course-management-service_v1
+    port: 8080
+    protocol: grpc
+    read_timeout: 60000
+    retries: 5
+    routes:
+      - https_redirect_status_code: 426
+        name: coursemanagement-route
+        path_handling: v1
+        paths:
+          - /api/v1/course-management-service
+        plugins:
+          - config:
+              proto: /usr/local/kong/protobuf/coursemanagement.proto
+            enabled: true
+            name: grpc-gateway
+            protocols:
+              - grpc
+              - grpcs
+              - http
+              - https
+        preserve_host: false
+        protocols:
+          - http
+          - https
+        regex_priority: 0
+        request_buffering: true
+        response_buffering: true
+        strip_path: true
+    write_timeout: 60000
+  - connect_timeout: 60000
+    enabled: true
+    host: profile_service
+    name: profileservice_v1
+    path: /
+    port: 8081
+    protocol: http
+    read_timeout: 60000
+    retries: 5
+    routes:
+      - https_redirect_status_code: 426
+        name: profileservice-route
+        path_handling: v1
+        paths:
+          - /api/v1/profileservice
+        preserve_host: false
+        protocols:
+          - http
+          - https
+        regex_priority: 0
+        request_buffering: true
+        response_buffering: true
+        strip_path: true
+    write_timeout: 60000
+  - connect_timeout: 60000
+    enabled: true
+    host: review_publisher
+    name: review-service_v1
+    port: 8080
+    protocol: http
+    read_timeout: 60000
+    retries: 5
+    routes:
+      - https_redirect_status_code: 426
+        name: review-service-route
+        path_handling: v1
+        paths:
+          - /api/v1/reviewservice
+        preserve_host: false
+        protocols:
+          - http
+          - https
+        regex_priority: 0
+        request_buffering: true
+        response_buffering: true
+        strip_path: true
+    write_timeout: 60000
